@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { DataService } from '../services/data.service';
+
 @Component({
   selector: 'app-list',
   templateUrl: 'list.page.html',
@@ -20,7 +22,7 @@ export class ListPage implements OnInit {
     'build'
   ];
   public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
+  constructor(private dataService: DataService) {
     for (let i = 1; i < 11; i++) {
       this.items.push({
         title: 'Item ' + i,
@@ -28,6 +30,10 @@ export class ListPage implements OnInit {
         icon: this.icons[Math.floor(Math.random() * this.icons.length)]
       });
     }
+
+    dataService.index("users").subscribe(res => {
+      console.log(res);
+    })
   }
 
   ngOnInit() {
