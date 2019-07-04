@@ -1,3 +1,5 @@
+import { environment } from '../environments/environment';
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -10,6 +12,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 //   { provide: HTTP_INTERCEPTORS, useClass: VersionInterceptor, multi: true },
 //   { provide: HTTP_INTERCEPTORS, useClass: NotificationInterceptor, multi: true }
 // ];
+
+import { AngularTokenService,  AngularTokenModule,  AngularTokenOptions} from 'angular-token';
+import { ActionCableService } from 'angular2-actioncable';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -25,12 +30,15 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularTokenModule.forRoot({apiBase: environment.apiPath}),
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AngularTokenModule,
+    ActionCableService
   ],
   bootstrap: [AppComponent]
 })

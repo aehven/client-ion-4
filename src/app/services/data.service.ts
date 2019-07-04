@@ -92,6 +92,7 @@ export class DataService {
       },
 
       error => {
+        console.log("setCurrent error: ", error);
         this.current[resource] = null;
         this.storage.setObj("current", this.current);
       }
