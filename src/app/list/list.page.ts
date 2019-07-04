@@ -32,7 +32,7 @@ export class ListPage implements OnInit {
     }
 
     dataService.index("users").subscribe(res => {
-      console.log(res);
+      console.log("Users: ", res);
     })
   }
 
