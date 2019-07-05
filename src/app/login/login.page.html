@@ -1,9 +1,3 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Log In</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2rem">
     <ion-row padding justify-content-center>
@@ -28,12 +22,16 @@
             </div>
 
             <ion-row justify-content-center padding *ngIf="invalidCreds" class="red">
-              Sorry, we did not recognize your email address or password.
+              <ion-col>
+                Sorry, we did not recognize your email address or password.
+              </ion-col>
             </ion-row>
 
 
             <ion-row justify-content-center padding *ngIf="unknownError" class="red">
-              Sorry, an unknown error occurred.  Please try again later.
+              <ion-col>
+                Sorry, an unknown error occurred.  Please try again later.
+              </ion-col>
             </ion-row>
 
             <div padding>
