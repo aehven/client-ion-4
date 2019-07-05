@@ -11,28 +11,30 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-grid>
-  <ion-row>
-    <ion-col size="12" size-sm>
-      <ion-button color="primary" (click)="newItem();"
-        *ngIf="sessionService.currentUser?.can('create', 'User')">
-        New {{Klass}}
-      </ion-button>
-    </ion-col>
-    <ion-col size="12" size-sm>
-      <input type="search" [(ngModel)]="searchTerm" (change)="search()" placeholder="Search by name or email">
-    </ion-col>
-  </ion-row>
-</ion-grid>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm>
+        <ion-button color="primary" (click)="newItem();"
+          *ngIf="sessionService.currentUser?.can('create', 'User')">
+          New {{Klass}}
+        </ion-button>
+      </ion-col>
+      <ion-col size="12" size-sm>
+        <input type="search" [(ngModel)]="searchTerm" (change)="search()" placeholder="Search by name or email">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-<ion-list>
-  <ion-item *ngFor="let item of data">
-    <div class="item-name">{{item.first_name}} {{item.last_name}}</div>
-    <div class="item-email">{{item.email}}</div>
-    <div class="item-role">{{item.role}}</div>
-    <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
-  </ion-item>
-</ion-list>
+  <ion-list>
+    <ion-item *ngFor="let item of data">
+      <div class="item-name">{{item.first_name}} {{item.last_name}}</div>
+      <div class="item-email">{{item.email}}</div>
+      <div class="item-role">{{item.role}}</div>
+      <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
+    </ion-item>
+  </ion-list>
+<ion-content>
 <!--
 <br />&nbsp;
 
