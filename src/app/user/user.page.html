@@ -19,6 +19,12 @@
 
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
             <div padding>
+              <ion-item *ngIf="usersBelongToCustomers && sessionService?.currentUser?.can('index', 'Customer')">
+                <ion-select placeholder="Customer" formControlName="customer_id" (selectionChange)="customerChanged($event)">
+                  <ion-select-option value=null>None</ion-select-option>
+                  <ion-select-option *ngFor="let customer of customers" [value]="customer[0]">{{customer[1]}}</ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-item>
                 <ion-input name="first_name" type="text" placeholder="First name" autocomplete="off" formControlName="first_name"></ion-input>
               </ion-item>
@@ -27,6 +33,13 @@
               </ion-item>
               <ion-item>
                 <ion-input name="email" type="email" placeholder="your@email.com" autocomplete="off" formControlName="email"></ion-input>
+              </ion-item>
+              <ion-item *ngIf="sessionService.currentUser['role'] == 'admin'">
+                <ion-label>Role</ion-label>
+                <ion-select [value]="sessionService.currentUser['role']">
+                  <ion-select-option [disabled]="userCustomer > 0" value="admin">Admin</ion-select-option>
+                  <ion-select-option value="regular">Regular</ion-select-option>
+                </ion-select>
               </ion-item>
               <ion-item>
                 <ion-input name="password" type="password" placeholder="Password" autocomplete="off" formControlName="password"></ion-input>

@@ -46,6 +46,9 @@
               },
               {
                 "input": "src/app/styles/colors.scss"
+              },
+              {
+                "input": "src/app/styles/overrides.scss"
               }
             ],
             "scripts": [],
