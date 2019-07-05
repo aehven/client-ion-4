@@ -21,15 +21,12 @@
               </ion-item>
             </div>
 
-            <ion-row justify-content-center padding *ngIf="invalidCreds" class="red">
-              <ion-col>
+            <ion-row justify-content-center padding class="error">
+              <ion-col *ngIf="invalidCreds">
                 Sorry, we did not recognize your email address or password.
               </ion-col>
-            </ion-row>
 
-
-            <ion-row justify-content-center padding *ngIf="unknownError" class="red">
-              <ion-col>
+              <ion-col *ngIf="unknownError">
                 Sorry, an unknown error occurred.  Please try again later.
               </ion-col>
             </ion-row>

@@ -40,6 +40,12 @@
               },
               {
                 "input": "src/app/app.scss"
+              },
+              {
+                "input": "src/app/styles/util.scss"
+              },
+              {
+                "input": "src/app/styles/colors.scss"
               }
             ],
             "scripts": [],

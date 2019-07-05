@@ -1,0 +1,35 @@
+$black: black;
+$red: red;
+$green: green;
+$cyan: cyan;
+$blue: blue;
+$yellow: yellow;
+$magenta: magenta;
+$white: white;
+$orange: orange;
+$amber: #ffbf00;
+$grey: grey;
+
+.black { color: $black !important }
+.red, .error { color: $red !important }
+.green { color: $green !important }
+.cyan { color: $cyan !important }
+.blue { color: $blue !important }
+.yellow { color: $yellow !important }
+.magenta { color: $magenta !important }
+.white { color: $white !important }
+.orange { color: $orange !important }
+.amber { color: $amber !important }
+.grey { color: $grey !important }
+
+.bg-black { background-color: $black !important }
+.bg-red, .bg-error { background-color: $red !important }
+.bg-green { background-color: $green !important }
+.bg-cyan { background-color: $cyan !important }
+.bg-blue { background-color: $blue !important }
+.bg-yellow { background-color: $yellow !important }
+.bg-magenta { background-color: $magenta !important }
+.bg-white { background-color: $white !important }
+.bg-orange { background-color: $orange !important }
+.bg-amber { background-color: $amber !important }
+.bg-grey { background-color: $grey !important }

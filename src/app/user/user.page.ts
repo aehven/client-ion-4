@@ -6,6 +6,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 
 import { pluralize, titleize } from 'inflected';
+import { saveAs } from 'file-saver';
 
 import { DataService } from '../services/data.service';
 import { StorageService } from '../services/storage.service';

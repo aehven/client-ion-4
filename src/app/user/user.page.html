@@ -16,21 +16,30 @@
     <form [formGroup]="form" (ngSubmit)="submitForm(form)">
       <ion-grid>
         <ion-row color="primary" justify-content-center>
+
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
             <div padding>
               <ion-item>
-                <ion-input name="email" type="email" placeholder="your@email.com" required [ngClass]="{'red': invalidCreds}" autocomplete="off" formControlName="email" (input)="eraseErrors()"></ion-input>
+                <ion-input name="first_name" type="text" placeholder="First name" autocomplete="off" formControlName="first_name"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-input name="password" type="password" placeholder="Password" required [ngClass]="{'red': invalidCreds}" autocomplete="off" formControlName="password" (input)="eraseErrors()"></ion-input>
+                <ion-input name="last_name" type="text" placeholder="Last name" autocomplete="off" formControlName="last_name"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input name="email" type="email" placeholder="your@email.com" autocomplete="off" formControlName="email"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input name="password" type="password" placeholder="Password" autocomplete="off" formControlName="password"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input name="confirmPassword" type="password" placeholder="Confirm password" autocomplete="off" formControlName="confirmPassword"></ion-input>
               </ion-item>
             </div>
           </ion-col>
         </ion-row>
 
-        <ion-row>
-          <ion-col>
-            <ion-button color="primary"
+        <ion-row justify-content-center>
+            <ion-button
               *ngIf="!isReadOnly"
               type="submit"
               [disabled]="!form.valid"
@@ -38,27 +47,26 @@
               Submit
             </ion-button>
 
-            <ion-button color="primary"
+            <ion-button
               *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'User') || sessionService.currentUser?.can('update', 'profile'))"
               (click)="enableForm()"
             >
               Edit
             </ion-button>
 
-            <ion-button color="accent"
+            <ion-button color="secondary"
               *ngIf="!isReadOnly"
               (click)="cancel()"
             >
               Cancel
             </ion-button>
 
-            <ion-button color="warn"
+            <ion-button color="danger"
               *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'User')"
               (click)="delete($event)"
             >
               Delete
             </ion-button>
-          </ion-col>
         </ion-row>
       </ion-grid>
     </form>
