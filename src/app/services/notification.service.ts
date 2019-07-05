@@ -15,9 +15,6 @@ export class NotificationService {
 
   async show(notification: any) {
     console.log(`notification: ${JSON.stringify(notification)}`);
-    // let snackBarRef = this.snackBar.open(notification['text'], notification['action']||"OK", {
-    //     duration: notification.duration
-    // });
 
     const toast = await this.toastController.create({
       message: notification['text'],
@@ -25,7 +22,7 @@ export class NotificationService {
       buttons: [
         {
           side: 'end',
-          icon: 'check', 
+          text: 'OK',
           handler: () => {
             if(notification['id']) {
               let resp = this.dataService.post(`users/${this.storage.getObj("currentUser")['id']}/acknowledge_notification`, {notification_id: notification['id']});
@@ -38,16 +35,5 @@ export class NotificationService {
       ]
     });
     toast.present();
-
-    // snackBarRef.onAction().subscribe(() => {
-    //   if(notification['id']) {
-    //     let resp = this.dataService.post(`users/${this.storage.getObj("currentUser")['id']}/acknowledge_notification`, {notification_id: notification['id']});
-    //     resp.subscribe(data => {
-    //       console.log("acknowledged", data);
-    //     })
-    //   }
-    // })
-    //
-    // return snackBarRef;
   }
 }
