@@ -5,13 +5,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// export const httpInterceptorProviders = [
-//   // { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
-//   { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
-//   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-//   { provide: HTTP_INTERCEPTORS, useClass: VersionInterceptor, multi: true },
-//   { provide: HTTP_INTERCEPTORS, useClass: NotificationInterceptor, multi: true }
-// ];
+
+// import { NoopInterceptor } from './interceptors/noop-interceptor';
+import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { VersionInterceptor } from './interceptors/version-interceptor';
+import { NotificationInterceptor } from './interceptors/notification-interceptor';
+import { LoggingInterceptor } from './interceptors/logging-interceptor';
+
+export const httpInterceptorProviders = [
+  // { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: VersionInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: NotificationInterceptor, multi: true }
+];
 
 import { AngularTokenService,  AngularTokenModule,  AngularTokenOptions} from 'angular-token';
 import { ActionCableService } from 'angular2-actioncable';
@@ -38,7 +45,8 @@ import { AppRoutingModule } from './app-routing.module';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AngularTokenModule,
-    ActionCableService
+    ActionCableService,
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })
