@@ -2,7 +2,7 @@ import { environment } from '../../environments/environment';
 import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { AngularTokenService } from 'angular-token';
 
@@ -18,8 +18,6 @@ import { User } from '../user/user';
 export class SessionService {
   private status: EventEmitter<string> = new EventEmitter();
   private user: User = null;
-  private notificationSubscription: Subscription;
-  private configSubscription: Subscription;
 
   constructor(public tokenService: AngularTokenService,
     private router: Router,
@@ -156,28 +154,28 @@ export class SessionService {
     return authData;
   }
 
+  notificationDismissCallback() {
+    console.log("notification dismiss callback");
+  }
+
+  configDismissCallback() {
+    window.location.reload();
+  }
+
   getNotifications():void {
     console.log("getNotifications");
 
-    this.notificationSubscription = this.webSocketsService.connect("NotificationChannel", {}).subscribe(message => {
+    this.webSocketsService.connect("NotificationChannel", {}).subscribe(message => {
       console.log(`notification incoming message: ${message}`);
-      this.notificationService.show({text: message, action: "OK"});
+      this.notificationService.show({text: message, action: "OK"}, this.notificationDismissCallback);
     });
 
-    this.configSubscription = this.webSocketsService.connect("ConfigChannel", {}).subscribe(message => {
+    this.webSocketsService.connect("ConfigChannel", {}).subscribe(message => {
       console.log(`config incoming message: ${JSON.stringify(message)}`);
 
       this.storage.serverEnv = message;
 
-      // let ref = this.notificationService.show({text: "Config Update Available", action: "Reload"});
-      //
-      // ref.onAction().subscribe(() => {
-      //   window.location.reload();
-      // })
-
-      this.notificationService.show({text: "Config Update Available", action: "Reload"}).then(()=> {
-        window.location.reload();
-      })
+      this.notificationService.show({text: "Config Update Available", action: "Reload"}, this.configDismissCallback);
     });
   }
 

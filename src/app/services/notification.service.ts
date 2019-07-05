@@ -13,7 +13,7 @@ export class NotificationService {
     public dataService: DataService
   ) {}
 
-  async show(notification: any) {
+  async show(notification: any, dissmissCallback: Function = null) {
     console.log(`notification: ${JSON.stringify(notification)}`);
 
     const toast = await this.toastController.create({
@@ -34,6 +34,9 @@ export class NotificationService {
         }
       ]
     });
+
     toast.present();
+
+    toast.onDidDismiss().then(() => {console.log("didDismiss"); dissmissCallback()});
   }
 }
