@@ -1,7 +1,8 @@
 import { environment } from '../../environments/environment';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonInfiniteScroll } from '@ionic/angular';
 
 import { pluralize, titleize } from 'inflected';
 
@@ -15,18 +16,20 @@ import { SessionService } from '../services/session.service';
   styleUrls: ['./users.page.scss'],
 })
 export class UsersPage implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   public klass = "user";
   public Klass = titleize(this.klass);
 
   public gotIt: boolean = false;
-  public data: any;
+  public data: any[] = [];
   public sortBy = "email";
   public sortOrder = "asc";
 
   public searchTerm = "";
   public collectionSize = 1;
-  public page = 1;
-  public pageSize = "15";
+  public page = 0;
+  public pageSize = 25;
 
   public usersBelongToCustomers = environment.usersBelongToCustomers;
 
@@ -36,24 +39,26 @@ export class UsersPage implements OnInit {
     public router: Router) {}
 
   ngOnInit() {
-    this.pageSize = this.storage.getStr(`${pluralize(this.klass)}PageSize`) || "10"
-    this.getIndex();
+    this.loadData();
   }
 
-  public pageChanged(event) {
-    this.page = event.pageIndex+1;
-    this.storage.setStr(`${pluralize(this.klass)}PageSize`, event.pageSize);
-    this.pageSize = event.pageSize;
-    this.getIndex();
-  }
-
-  public getIndex() {
+  public loadData(event:any=null) {
+    console.log("loadData");
+    this.page += 1;
     this.gotIt = false;
     this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
     .subscribe( data => {
-      this.data = data[pluralize(this.klass)];
+      // this.data = data[pluralize(this.klass)];
+      for(let item of data[pluralize(this.klass)]) {
+        this.data.push(item);
+      }
+      // this.data = [...this.data, data[pluralize(this.klass)]],
+      // this.data.concat(data[pluralize(this.klass)][0]);
       this.collectionSize = data.count;
       this.gotIt = true;
+      if(event) {
+        event.target.complete();
+      }
     });
   }
 
@@ -66,6 +71,7 @@ export class UsersPage implements OnInit {
   }
 
   search(): void {
-    this.getIndex();
+    this.page = 0;
+    this.loadData();
   }
 }

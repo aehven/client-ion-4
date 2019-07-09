@@ -39,7 +39,11 @@
       <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
     </ion-item>
   </ion-list>
+
+  <ion-infinite-scroll threshold="50%" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 <ion-content>
-<!--
-<mat-paginator [length]="collectionSize" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageChanged($event)"></mat-paginator>
- -->
