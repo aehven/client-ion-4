@@ -21,13 +21,18 @@
         </ion-button>
       </ion-col>
       <ion-col size="12" size-sm>
-        <input type="search" [(ngModel)]="searchTerm" (change)="search()" placeholder="Search by name or email">
+         <ion-searchbar
+          placeholder="Search by name or email"
+          [(ngModel)]="searchTerm"
+          (ionChange)="search()"
+          dbounce="500"
+          ></ion-searchbar>
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <ion-list>
-    <ion-item *ngFor="let item of data">
+    <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
       <div class="item-name">{{item.first_name}} {{item.last_name}}</div>
       <div class="item-email">{{item.email}}</div>
       <div class="item-role">{{item.role}}</div>
@@ -36,26 +41,5 @@
   </ion-list>
 <ion-content>
 <!--
-<br />&nbsp;
-
-<div *ngFor="let item of data">
-  <mat-card class="list-card cursor-pointer list-item" fxLayoutAlign="center center" (click)="selectItem(item.id)" fxLayoutGap="5px">
-    <div fxFlex="40%">
-      {{item.first_name}} {{item.last_name}}
-      <span *ngIf="usersBelongToCustomers && sessionService.currentUser?.can('access', 'sub_customers')">
-        at {{item.customer_name}}
-      </span>
-    </div>
-    <div fxFlex="30%">
-      {{item.email}}
-    </div>
-    <div fxFlex="20%">
-      {{item.role}}
-    </div>
-    <div fxFlex="10%">
-      <i class="material-icons">navigate_next</i>
-    </div>
-  </mat-card>
-</div>
-
-<mat-paginator [length]="collectionSize" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageChanged($event)"></mat-paginator> -->
+<mat-paginator [length]="collectionSize" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageChanged($event)"></mat-paginator>
+ -->

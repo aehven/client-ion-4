@@ -3,3 +3,7 @@ ion-select {
   max-width: 100% !important;
   width: 100%;
 }
+
+ion-item:hover {
+  --color: var(--ion-color-primary);
+}
