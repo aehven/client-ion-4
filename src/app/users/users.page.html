@@ -40,10 +40,19 @@
     </ion-item>
   </ion-list>
 
-  <ion-infinite-scroll threshold="50%" (ionInfinite)="loadData($event)">
+  <div padding *ngIf="data.length < collectionSize; else endOfData" class="grey">
+    Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+  </div>
+  <ng-template #endOfData>
+    <div padding>
+      No more {{klasses}}.
+    </div>
+  </ng-template>
+
+  <ion-infinite-scroll threshold="80%" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
-      loadingText="Loading more data...">
+      loadingText="Loading more {{klasses}}...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 <ion-content>

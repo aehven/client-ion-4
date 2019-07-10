@@ -20,6 +20,8 @@ export class UsersPage implements OnInit {
 
   public klass = "user";
   public Klass = titleize(this.klass);
+  public klasses = pluralize(this.klass);
+  public Klasses = pluralize(this.Klass);
 
   public gotIt: boolean = false;
   public data: any[] = [];
@@ -29,7 +31,7 @@ export class UsersPage implements OnInit {
   public searchTerm = "";
   public collectionSize = 1;
   public page = 0;
-  public pageSize = 25;
+  public pageSize = 10;
 
   public usersBelongToCustomers = environment.usersBelongToCustomers;
 
@@ -44,16 +46,21 @@ export class UsersPage implements OnInit {
 
   public loadData(event:any=null) {
     console.log("loadData");
+
+    if(this.data.length >= this.collectionSize) {
+      if(event) {
+        event.target.complete();
+      }
+      return;
+    }
+
     this.page += 1;
     this.gotIt = false;
     this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
     .subscribe( data => {
-      // this.data = data[pluralize(this.klass)];
       for(let item of data[pluralize(this.klass)]) {
         this.data.push(item);
       }
-      // this.data = [...this.data, data[pluralize(this.klass)]],
-      // this.data.concat(data[pluralize(this.klass)][0]);
       this.collectionSize = data.count;
       this.gotIt = true;
       if(event) {
@@ -72,6 +79,7 @@ export class UsersPage implements OnInit {
 
   search(): void {
     this.page = 0;
+    this.data = [];
     this.loadData();
   }
 }
