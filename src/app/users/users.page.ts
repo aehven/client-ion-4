@@ -1,6 +1,6 @@
 import { environment } from '../../environments/environment';
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 
@@ -15,7 +15,7 @@ import { SessionService } from '../services/session.service';
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
 })
-export class UsersPage implements OnInit {
+export class UsersPage implements AfterViewInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public klass = "user";
@@ -40,7 +40,7 @@ export class UsersPage implements OnInit {
     public storage: StorageService,
     public router: Router) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.loadData();
   }
 

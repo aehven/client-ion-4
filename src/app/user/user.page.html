@@ -35,9 +35,10 @@
                 <ion-input name="email" type="email" placeholder="your@email.com" autocomplete="off" formControlName="email"></ion-input>
               </ion-item>
               <ion-item *ngIf="sessionService.currentUser['role'] == 'admin'">
-                <ion-label>Role</ion-label>
-                <ion-select [value]="sessionService.currentUser['role']">
-                  <ion-select-option [disabled]="userCustomer > 0" value="admin">Admin</ion-select-option>
+                <ion-select placeholder="Role" [value]="sessionService.currentUser['role']" formControlName="role">
+                  <ion-select-option *ngIf="userCustomer > 0" value="admin">Admin</ion-select-option>
+                  <ion-select-option value="manager">Manager</ion-select-option>
+                  <ion-select-option value="supervisor">Supervisor</ion-select-option>
                   <ion-select-option value="regular">Regular</ion-select-option>
                 </ion-select>
               </ion-item>
