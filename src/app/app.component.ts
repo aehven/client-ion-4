@@ -1,3 +1,5 @@
+import { environment } from '../environments/environment';
+
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
@@ -12,6 +14,8 @@ import { SessionService } from './services/session.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  public usersBelongToCustomers = environment.usersBelongToCustomers;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,

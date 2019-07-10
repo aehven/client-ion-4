@@ -19,6 +19,11 @@
             <ion-label>Users</ion-label>
           </ion-item>
 
+          <ion-item *ngIf="usersBelongToCustomers && sessionService?.currentUser?.can('index', 'Customer')" routerLink="/customers">
+            <ion-icon name="business" slot="start"></ion-icon>
+            <ion-label>Customers</ion-label>
+          </ion-item>
+
           <ion-item routerLink="/list">
             <ion-icon name="chatbubbles" slot="start"></ion-icon>
             <ion-label>Notifications</ion-label>

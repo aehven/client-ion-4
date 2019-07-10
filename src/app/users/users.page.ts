@@ -25,8 +25,6 @@ export class UsersPage implements AfterViewInit {
 
   public gotIt: boolean = false;
   public data: any[] = [];
-  public sortBy = "email";
-  public sortOrder = "asc";
 
   public searchTerm = "";
   public collectionSize = 1;
@@ -45,8 +43,6 @@ export class UsersPage implements AfterViewInit {
   }
 
   public loadData(event:any=null) {
-    console.log("loadData");
-
     if(this.data.length >= this.collectionSize) {
       if(event) {
         event.target.complete();

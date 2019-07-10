@@ -22,7 +22,7 @@
       </ion-col>
       <ion-col size="12" size-sm>
          <ion-searchbar
-          placeholder="Search by name or email"
+          placeholder="Search by name"
           [(ngModel)]="searchTerm"
           (ionChange)="search()"
           dbounce="500"
@@ -33,9 +33,8 @@
 
   <ion-list>
     <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-      <div class="item-name">{{item.first_name}} {{item.last_name}}</div>
-      <div class="item-email">{{item.email}}</div>
-      <div class="item-role">{{item.role}}</div>
+      <div class="item-name">{{item.name}}</div>
+      <div class="item-city">{{item.city}}</div>
       <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
     </ion-item>
   </ion-list>
