@@ -138,6 +138,13 @@ export class SessionService {
       this.webSocketsService.destroy();
       this.status.emit("LoggedOut");
       this.storage.clear();
+
+      if(environment.allowAnonymousUsers) {
+        this.anonymousSignIn();
+      }
+      else {
+        this.router.navigate(['/login']);
+      }
     });
 
     return res;
