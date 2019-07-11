@@ -1,9 +1,59 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>customer</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div *ngIf="gotIt" class="got-customer">GOT IT</div>
+
+<app-header title="{{Klass}}"></app-header>
 
 <ion-content>
+
+    <form [formGroup]="form" (ngSubmit)="submitForm(form)">
+      <ion-grid>
+        <ion-row color="primary" justify-content-center>
+
+          <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
+            <div padding>
+              <ion-item>
+                <ion-input name="name" type="text" placeholder="Customer name" autocomplete="off" formControlName="name"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input name="address1" type="text" placeholder="Address 1" autocomplete="off" formControlName="address1"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input name="address2" type="text" placeholder="Address 2" autocomplete="off" formControlName="address2"></ion-input>
+              </ion-item>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row justify-content-center>
+            <ion-button
+              *ngIf="!isReadOnly"
+              type="submit"
+              [disabled]="!form.valid"
+            >
+              Submit
+            </ion-button>
+
+            <ion-button
+              *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Customer'))"
+              (click)="enableForm()"
+            >
+              Edit
+            </ion-button>
+
+            <ion-button color="secondary"
+              *ngIf="!isReadOnly"
+              (click)="cancel()"
+            >
+              Cancel
+            </ion-button>
+
+            <ion-button color="danger"
+              *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Customer')"
+              (click)="delete($event)"
+            >
+              Delete
+            </ion-button>
+        </ion-row>
+      </ion-grid>
+    </form>
 
 </ion-content>
