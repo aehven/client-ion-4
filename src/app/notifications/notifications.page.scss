@@ -1,0 +1,14 @@
+ion-item div {
+  white-space: nowrap;
+  padding-right: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-text {
+  width: 95%;
+}
+
+.item-go {
+  width: 5%;
+}

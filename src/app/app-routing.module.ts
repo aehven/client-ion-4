@@ -2,24 +2,15 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-  {
-    path: 'home',
-    loadChildren: './home/home.module#HomePageModule'
-  },
-  {
-    path: 'list',
-    loadChildren: './list/list.module#ListPageModule'
-  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'home', loadChildren: './home/home.module#HomePageModule'},
   { path: 'user/:id', loadChildren: './user/user.module#UserPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'users', loadChildren: './users/users.module#UsersPageModule' },
   { path: 'customer/:id', loadChildren: './customer/customer.module#CustomerPageModule' },
-  { path: 'customers', loadChildren: './customers/customers.module#CustomersPageModule' }
+  { path: 'customers', loadChildren: './customers/customers.module#CustomersPageModule' },
+  { path: 'notification/:id', loadChildren: './notification/notification.module#NotificationPageModule' },
+  { path: 'notifications', loadChildren: './notifications/notifications.module#NotificationsPageModule' }
 ];
 
 @NgModule({
