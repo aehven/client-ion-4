@@ -57,7 +57,7 @@ export class UsersPage implements AfterViewInit {
       for(let item of data[pluralize(this.klass)]) {
         this.data.push(item);
       }
-      this.collectionSize = data.count;
+      this.collectionSize = data['meta']['total'];
       this.gotIt = true;
       if(event) {
         event.target.complete();
