@@ -48,6 +48,7 @@ export class CustomersPage implements AfterViewInit {
       this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
       .subscribe( data => {
         for(let item of data[pluralize(this.klass)]) {
+          item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
           this.data.push(item);
         }
         this.collectionSize = data['meta']['total'];

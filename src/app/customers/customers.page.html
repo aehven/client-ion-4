@@ -24,9 +24,9 @@
 
   <ion-list>
     <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-      <div class="item-name">{{item.name}}</div>
+      <div class="item-name"><div [outerHTML]="item.name"></div></div>
       <div class="item-city">{{item.city}}</div>
-      <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
+      <div class="item-go float-right"><ion-icon name="arrow-forward"></ion-icon></div>
     </ion-item>
   </ion-list>
 
