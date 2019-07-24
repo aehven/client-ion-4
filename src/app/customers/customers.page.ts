@@ -19,6 +19,7 @@ export class CustomersPage implements AfterViewInit {
   public Klasses = pluralize(this.Klass);
 
   public data: any[] = [];
+  public customers;
 
   public gotIt: boolean = false;
   public searchTerm = "";
@@ -52,11 +53,18 @@ export class CustomersPage implements AfterViewInit {
           this.data.push(item);
         }
         this.collectionSize = data['meta']['total'];
+        this.getCustomers(event);
+      });
+    }
+
+    getCustomers(event:any=null): void {
+      this.dataService.index("customers").subscribe(data => {
+        this.customers = data.customers;
         this.gotIt = true;
         if(event) {
           event.target.complete();
         }
-      });
+      })
     }
 
     selectItem(id: number): void {

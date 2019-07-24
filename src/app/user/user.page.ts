@@ -43,7 +43,7 @@ export class UserPage implements OnInit {
                 this.form = fb.group({
                   'first_name' : [null, Validators.required],
                   'last_name' : [null, Validators.required],
-                  'customer_id' : [null],
+                  'customer_id' : [this.sessionService.currentUser.customer_id],
                   'email' :  [null, [Validators.required]],
                   'role': ['regular'],
                   'password' : '',
@@ -91,7 +91,7 @@ export class UserPage implements OnInit {
 
   getCustomers(): void {
     if(this.usersBelongToCustomers && this.sessionService.currentUser.can('index', 'Customer')) {
-      this.dataService.index("customers", {names_and_ids_only: true}).subscribe(data => {
+      this.dataService.index("customers").subscribe(data => {
         this.customers = data.customers;
         this.gotIt = true;
       })

@@ -12,8 +12,8 @@
             <div padding>
               <ion-item *ngIf="usersBelongToCustomers && sessionService?.currentUser?.can('index', 'Customer')">
                 <ion-select placeholder="Customer" formControlName="customer_id" (selectionChange)="customerChanged($event)">
-                  <ion-select-option value=null>None</ion-select-option>
-                  <ion-select-option *ngFor="let customer of customers" [value]="customer[0]">{{customer[1]}}</ion-select-option>
+                  <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
+                  <ion-select-option *ngFor="let customer of customers" [value]="customer.id">{{customer.name}}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
@@ -25,14 +25,23 @@
               <ion-item>
                 <ion-input name="email" type="email" placeholder="your@email.com" autocomplete="off" formControlName="email"></ion-input>
               </ion-item>
-              <ion-item *ngIf="sessionService.currentUser['role'] == 'admin'">
+              <ion-item *ngIf="sessionService.currentUser?.can('create', 'User')">
                 <ion-select placeholder="Role" [value]="sessionService.currentUser['role']" formControlName="role">
                   <ion-select-option *ngIf="userCustomer > 0" value="admin">Admin</ion-select-option>
                   <ion-select-option value="manager">Manager</ion-select-option>
-                  <ion-select-option value="supervisor">Supervisor</ion-select-option>
+                  <!-- <ion-select-option value="supervisor">Supervisor</ion-select-option> -->
                   <ion-select-option value="regular">Regular</ion-select-option>
                 </ion-select>
               </ion-item>
+              <div class="user-role-exp">
+                <div *ngIf="form.controls['role'].value == 'manager'">
+                  A manager has special permissions, including creating users and sub-customers, as well as other privileges.  Please choose 'Regular' user unless special permissions are absoltely required for this user.
+                </div>
+                <div *ngIf="form.controls['role'].value == 'regular'">
+                  A regular user can....  Assign this role to a user unless you are sure higher permissions are necessary now.
+                </div>
+                (You can always change this user's role later if necessary.)
+              </div>
               <ion-item>
                 <ion-input name="password" type="password" placeholder="Password" autocomplete="off" formControlName="password"></ion-input>
               </ion-item>

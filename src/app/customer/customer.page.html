@@ -10,6 +10,12 @@
 
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
             <div padding>
+              <ion-item *ngIf="customers?.length > 0 && sessionService?.currentUser?.can('create', 'Customer')">
+                <ion-select placeholder="Parent customer" formControlName="parent_id">
+                  <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
+                  <ion-select-option *ngFor="let customer of customers" [value]="customer.id">{{customer.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-item>
                 <ion-input name="name" type="text" placeholder="Customer name" autocomplete="off" formControlName="name"></ion-input>
               </ion-item>

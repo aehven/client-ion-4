@@ -22,6 +22,7 @@ export class CustomerPage implements OnInit {
   public isReadOnly: boolean = true;
   public id;
   public errorMessage;
+  public customers;
 
   constructor(public dataService: DataService,
               public route: ActivatedRoute,
@@ -30,6 +31,7 @@ export class CustomerPage implements OnInit {
               public sessionService: SessionService,
               fb: FormBuilder) {
                 this.form = fb.group({
+                  'parent_id' : [this.sessionService.currentUser.customer_id],
                   'name' : [null, Validators.required],
                   'address1' : [null, Validators.required],
                   'address2' :  [null]
@@ -42,7 +44,8 @@ export class CustomerPage implements OnInit {
 
       if(this.id == "new") {
         this.enableForm();
-        this.gotIt = true;
+        this.gotIt = false;
+        this.getCustomers();
       }
       else {
         this.disableForm(false);
@@ -56,8 +59,20 @@ export class CustomerPage implements OnInit {
     this.dataService.show(`${this.klass}`, + this.id)
     .subscribe( data => {
       this.form.patchValue(data);
-      this.gotIt = true;
+      if(this.form.controls['parent_id'].value != null || this.sessionService.currentUser.role == 'admin') {
+        this.getCustomers();
+      }
+      else {
+        this.gotIt = true;
+      }
     });
+  }
+
+  getCustomers(): void {
+    this.dataService.index("customers", {names_and_ids_only: true}).subscribe(data => {
+      this.customers = data.customers.filter(c => parseInt(c[0]) != parseInt(this.id));
+      this.gotIt = true;
+    })
   }
 
   submitForm(form): void {

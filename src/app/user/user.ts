@@ -14,6 +14,7 @@ export class User {
   minileague_id: number;
   permissions: any;
   wst: string;
+  customer_id;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);
