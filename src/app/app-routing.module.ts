@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'customer/:id', loadChildren: './customer/customer.module#CustomerPageModule' },
   { path: 'customers', loadChildren: './customers/customers.module#CustomersPageModule' },
   { path: 'notification/:id', loadChildren: './notification/notification.module#NotificationPageModule' },
-  { path: 'notifications', loadChildren: './notifications/notifications.module#NotificationsPageModule' }
+  { path: 'notifications', loadChildren: './notifications/notifications.module#NotificationsPageModule' },
+  { path: 'terms-and-conditions', loadChildren: './terms-and-conditions/terms-and-conditions.module#TermsAndConditionsPageModule' }
 ];
 
 @NgModule({
