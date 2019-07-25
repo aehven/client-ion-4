@@ -1,76 +1,9 @@
-@import './util.scss';
-
-.mat-input-infix {
-  // background-color: #fdfdfd !important;
-  padding: 5px !important;
+ion-select {
+  min-width: 100% !important;
+  max-width: 100% !important;
+  width: 100%;
 }
 
-.mat-form-field-disabled {
-  input, .mat-select-value {
-    color: rgba(0,0,0,.7) !important;
-  }
-}
-
-.mat-sidenav-content {
-  padding: 1rem;
-}
-
-mat-form-field.textarea {
-  width: 30rem !important;
-}
-
-textarea {
-  height: 4rem;
-}
-
-.mat-tab-body {
-  margin-top: 2rem;
-}
-
-.mat-dialog-container {
-  max-width: 95vw !important;
-  max-height: 95vh !important;
-  overflow: auto;
-}
-
-.cdk-overlay-pane {
-  max-width: 95vw !important;
-}
-
-.mat-tab-body-content {
-  width: 100vw !important;
-}
-
-context-menu-content {
-  @extend .raised;
-  background-color: white;
-  width: 150px;
-
-  ul {
-    list-style-type: none;
-
-    a {
-      text-decoration: none;
-    }
-  }
-}
-
-mat-radio-button.image {
-  label {
-    border: 1px solid #efefef;
-    margin: 5px !important;
-  }
-
-  &.mat-radio-checked label {
-    border-color: green;
-    background-color: lightgreen;
-  }
-
-  .mat-radio-container {
-    display: none !important;
-  }
-
-  .mat-radio-label-content {
-    padding: 0;
-  }
+ion-item:hover {
+  --color: var(--ion-color-primary);
 }

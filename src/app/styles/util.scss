@@ -42,7 +42,7 @@
   font-style: italic;
 }
 
-.btn:hover {
+button:hover {
   cursor: pointer
 }
 
@@ -50,23 +50,6 @@
   display: none !important;
 }
 
-.mat-card.translucent {
-  opacity: 0.8;
-}
-
-.list-card {
-  padding: 12px;
-  margin: 5px 5px;
-  overflow-x: scroll;
-}
-
-.float-right {
-  float: right;
-}
-
-.float-left {
-  float: left;
-}
 
 [class^="got-"] {
   display: none !important;
@@ -111,29 +94,11 @@
   100% {opacity: 1.0}
 }
 
-// ← ↑ → ↓ ⟳  from https://www.key-shortcut.com/en/writing-systems/35-symbols/arrows/
 
 .raised {
   box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.4);
 }
 
-.bubble {
-  padding: 1rem;
-  border-radius: 15px !important;
-  font-size: 14px;
-  margin-left: -2px !important;
-  background-color: cyan;
-  color: black !important;
-}
-
-.bubble-on-right:before {
-  content: '← ';
-}
-
-.bubble-on-right {
-  @extend .raised;
-  @extend .bubble;
-}
 
 pre {
   font-family: monospace;

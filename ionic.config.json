@@ -1,0 +1,7 @@
+{
+  "name": "iongen",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
