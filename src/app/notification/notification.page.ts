@@ -34,7 +34,7 @@ export class NotificationPage implements OnInit {
                 this.form = fb.group({
                   'title' : [null, Validators.required],
                   'text' : [null, Validators.required],
-                  'level' : [null],
+                  'level' : ["Warning"],
                   'expires_at' : [null],
                   'in_app' : [null],
                   'email' : [null],

@@ -8,8 +8,34 @@
       <ion-grid>
         <ion-row color="primary" justify-content-center>
 
-          <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
+          <ion-col align-self-center size-xs="10" size-sm="8" size-md="6" size-lg="4">
             <div padding>
+              <ion-item>
+                <ion-radio-group  formControlName="level">
+                  <ion-row>
+                    <ion-col>
+                      <ion-item>
+                        <ion-label>Info</ion-label>
+                        <ion-radio slot="start" value="Info" checked></ion-radio>
+                      </ion-item>
+                    </ion-col>
+
+                    <ion-col>
+                      <ion-item>
+                        <ion-label>Warning</ion-label>
+                        <ion-radio slot="start" value="Warning"></ion-radio>
+                      </ion-item>
+                    </ion-col>
+
+                    <ion-col>
+                      <ion-item>
+                        <ion-label>Error</ion-label>
+                        <ion-radio slot="start" value="Error"></ion-radio>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                </ion-radio-group>
+              </ion-item>
               <ion-item>
                 <ion-input name="title" type="text" placeholder="Title" autocomplete="off" formControlName="title"></ion-input>
               </ion-item>
