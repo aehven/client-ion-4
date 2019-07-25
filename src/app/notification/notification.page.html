@@ -1,9 +1,56 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>notification</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div *ngIf="gotIt" class="got-notification">GOT IT</div>
+
+<app-header title="{{Klass}}"></app-header>
 
 <ion-content>
+
+    <form [formGroup]="form" (ngSubmit)="submitForm(form)">
+      <ion-grid>
+        <ion-row color="primary" justify-content-center>
+
+          <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
+            <div padding>
+              <ion-item>
+                <ion-input name="title" type="text" placeholder="Title" autocomplete="off" formControlName="title"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input name="text" type="textarea" placeholder="Text" autocomplete="off" formControlName="text"></ion-input>
+              </ion-item>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row justify-content-center>
+            <ion-button
+              *ngIf="!isReadOnly"
+              type="submit"
+              [disabled]="!form.valid"
+            >
+              Submit
+            </ion-button>
+
+            <ion-button
+              *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Notification'))"
+              (click)="enableForm()"
+            >
+              Edit
+            </ion-button>
+
+            <ion-button color="secondary"
+              *ngIf="!isReadOnly"
+              (click)="cancel()"
+            >
+              Cancel
+            </ion-button>
+
+            <ion-button color="danger"
+              *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Notification')"
+              (click)="delete($event)"
+            >
+              Delete
+            </ion-button>
+        </ion-row>
+      </ion-grid>
+    </form>
 
 </ion-content>
