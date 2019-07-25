@@ -6,7 +6,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from '../notification.service';
 
 @Injectable()
 export class NotificationInterceptor implements HttpInterceptor {
