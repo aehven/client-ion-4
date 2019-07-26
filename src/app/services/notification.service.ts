@@ -18,11 +18,11 @@ export class NotificationService {
 
     const toast = await this.toastController.create({
       message: notification['text'],
-      duration: notification.duration,
+      duration: notification.duration*1000,
       buttons: [
         {
           side: 'end',
-          text: 'OK',
+          text: notification['action'],
           handler: () => {
             if(notification['id']) {
               let resp = this.dataService.post(`users/${this.storage.getObj("currentUser")['id']}/acknowledge_notification`, {notification_id: notification['id']});

@@ -172,9 +172,9 @@ export class SessionService {
   getNotifications():void {
     console.log("getNotifications");
 
-    this.webSocketsService.connect("NotificationChannel", {}).subscribe(message => {
-      console.log(`notification incoming message: ${message}`);
-      this.notificationService.show({text: message, action: "OK"}, this.notificationDismissCallback);
+    this.webSocketsService.connect("NotificationChannel", {}).subscribe(notification => {
+      console.log(`notification incoming message: ${notification}`);
+      this.notificationService.show(notification, this.notificationDismissCallback);
     });
 
     this.webSocketsService.connect("ConfigChannel", {}).subscribe(message => {
