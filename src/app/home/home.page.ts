@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SessionService } from '../services/session.service';
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -9,12 +7,8 @@ import { SessionService } from '../services/session.service';
 })
 export class HomePage implements OnInit {
 
-  constructor(private sessionService: SessionService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.sessionService.signIn({
-        login:    "admin@null.com",
-        password: "password"
-    }).subscribe((data) =>{console.log("signIn: ", data)});
   }
 }

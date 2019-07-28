@@ -177,6 +177,11 @@ export class SessionService {
       this.notificationService.show(notification, this.notificationDismissCallback);
     });
 
+    this.webSocketsService.connect("NotificationChannel", {user_id: this.user.id}).subscribe(notification => {
+      console.log(`notification incoming message: ${notification}`);
+      this.notificationService.show(notification, this.notificationDismissCallback);
+    });
+
     this.webSocketsService.connect("ConfigChannel", {}).subscribe(message => {
       console.log(`config incoming message: ${JSON.stringify(message)}`);
 
