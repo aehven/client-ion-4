@@ -1,7 +1,7 @@
 import { environment } from '../../environments/environment';
 
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 
 import { pluralize, titleize } from 'inflected';
@@ -15,7 +15,7 @@ import { SessionService } from '../services/session.service';
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
 })
-export class UsersPage implements AfterViewInit {
+export class UsersPage implements OnInit, AfterViewInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public klass = "user";
@@ -36,7 +36,18 @@ export class UsersPage implements AfterViewInit {
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
+    private route: ActivatedRoute,
     public router: Router) {}
+
+    ngOnInit() {
+      this.route.queryParams.subscribe(params => {
+        if(params["reload"]) {
+          this.data = [];
+          this.page = 0;
+          this.loadData();
+        }
+      })
+    }
 
   ngAfterViewInit() {
     this.loadData();

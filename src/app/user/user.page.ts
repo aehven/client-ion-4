@@ -113,7 +113,7 @@ export class UserPage implements OnInit {
           this.location.back();
         }
         else {
-          this.router.navigate([`/${pluralize(this.klass)}`]);
+          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
         }
       },
       error => {
