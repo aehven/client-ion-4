@@ -83,7 +83,7 @@ export class CustomerPage implements OnInit {
     response.subscribe(
       res =>  {
         this.id = res['id'];
-        this.router.navigate([`/${pluralize(this.klass)}`]);
+        this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
       },
       error => {
         this.errorMessage = error.error.message;

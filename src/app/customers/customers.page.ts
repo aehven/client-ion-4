@@ -1,5 +1,5 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { pluralize, titleize } from 'inflected';
 
@@ -12,7 +12,7 @@ import { SessionService } from '../services/session.service';
   templateUrl: './customers.page.html',
   styleUrls: ['./customers.page.scss'],
 })
-export class CustomersPage implements AfterViewInit {
+export class CustomersPage implements AfterViewInit, OnInit {
   public klass = "customer";
   public Klass = titleize(this.klass);
   public klasses = pluralize(this.klass);
@@ -30,7 +30,18 @@ export class CustomersPage implements AfterViewInit {
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
+    private route: ActivatedRoute,
     public router: Router) {}
+
+    ngOnInit() {
+      this.route.queryParams.subscribe(params => {
+        if(params["reload"]) {
+          this.data = [];
+          this.page = 0;
+          this.loadData();
+        }
+      })
+    }
 
     ngAfterViewInit() {
       this.loadData();
