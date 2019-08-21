@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
+
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -11,7 +13,7 @@ import { SessionService } from '../services/session.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   form : FormGroup;
   invalidCreds : boolean = false;
   unknownError : boolean = false;
@@ -26,6 +28,16 @@ export class LoginPage {
       'email' : null,
       'password': null
     })
+  }
+
+  ngOnInit() {
+    if(environment.allowAnonymousUsers) {
+      this.route.queryParams.subscribe(params => {
+        if(params["anonymous"]) {
+          this.sessionService.anonymousSignIn();
+        }
+      })
+    }
   }
 
   submitForm(form: FormGroup): void {
