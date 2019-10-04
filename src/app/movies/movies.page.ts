@@ -13,6 +13,8 @@ import { SessionService } from '../services/session.service';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 
+import { FileUploadControl } from '@iplab/ngx-file-upload';
+
 @Component({
   selector: 'app-movies',
   templateUrl: './movies.page.html',
@@ -33,6 +35,8 @@ export class MoviesPage implements OnInit, AfterViewInit {
   public collectionSize = 1;
   public page = 0;
   public pageSize = 10;
+
+  public fileUploadControl = new FileUploadControl().setListVisibility(false);
 
   constructor(public sessionService: SessionService,
     public dataService: DataService,
@@ -121,25 +125,5 @@ export class MoviesPage implements OnInit, AfterViewInit {
         console.log("ERROR: ", err);
       });
     }
-    // const file = fileInput.target.files[0];
-    //
-    // //IAM USER arn:aws:iam::963873228139:user/Uploader
-    // const bucket = new S3(
-    //   {
-    //     accessKeyId: 'AKIA6A22SIVVXAHGJJON',
-    //     secretAccessKey: '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',
-    //     region: 'us-west-1'
-    //   })
-    //
-    // const params = {
-    //   Bucket: 'gallo-movies',
-    //   Key: file.name,
-    //   Body: file
-    // };
-    //
-    // bucket.upload(params, function (err, data) {
-    //   console.log("DATA: ", data);
-    //   console.log("ERROR: ", err);
-    // });
   }
 }

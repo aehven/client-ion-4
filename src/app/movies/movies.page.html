@@ -30,6 +30,16 @@
 
   <input type="file" (change)="fileEvent($event)" multiple/>
 
+  <file-upload [control]="fileUploadControl"></file-upload>
+
+  <div class="file-list" *ngIf="fileUploadControl.value.length > 0">
+      <div class="file-item"
+          *ngFor="let file of fileUploadControl.value"
+          (click)="fileUploadControl.removeFile(file)">
+          {{ file.name }}
+      </div>
+  </div>
+
   <ion-list>
     <ion-item>
       <div class="item-url">URL</div>
@@ -38,6 +48,37 @@
       <div class="item-time">Winnner</div>
       <div class="item-go"></div>
     </ion-item>
+
+    <ion-item *ngFor="let item of fileUploadControl.value">
+      <div class="item-url">
+        <ion-input type="text" [(ngModel)]="item.name" (change)="change(item)"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.start" (change)="change(item)"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.end" (change)="change(item)"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="change(item)">
+          <ion-select-option value="ROJO">ROJO</ion-select-option>
+          <ion-select-option value="VERDE">VERDE</ion-select-option>
+        </ion-select>
+      </div>
+      <div class="item-go"><a href="{{item.url}}" target="_blank"><ion-icon name="open"></ion-icon></a></div>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list>
+    <ion-item>
+      <div class="item-url">URL</div>
+      <div class="item-time">Start</div>
+      <div class="item-time">End</div>
+      <div class="item-time">Winnner</div>
+      <div class="item-go"></div>
+    </ion-item>
+
     <ion-item *ngFor="let item of data">
       <div class="item-url">
         <ion-input type="text" [(ngModel)]="item.url" (change)="change(item)"></ion-input>
