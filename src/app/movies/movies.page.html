@@ -47,7 +47,12 @@
         <ion-input [(ngModel)]="item.end" (change)="change(item)"></ion-input>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item.winner" (change)="change(item)"></ion-input>
+        <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="change(item)">
+          <ion-select-option value="ROJO">ROJO</ion-select-option>
+          <ion-select-option value="VERDE">VERDE</ion-select-option>
+        </ion-select>
+
+        <!-- <ion-input [(ngModel)]="item.winner" (change)="change(item)"></ion-input> -->
       </div>
       <div class="item-go"><a href="{{item.url}}" target="_blank"><ion-icon name="open"></ion-icon></a></div>
     </ion-item>
