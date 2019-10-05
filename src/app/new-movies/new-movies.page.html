@@ -22,8 +22,12 @@
       </ion-col>
       <ion-col size="12" size-sm align-self-center class="center">
         <ion-button id="top" color="success" (click)="performUpload()" [disabled]="!uploadAllowed()">
-          Go
+          Upload Now
         </ion-button>
+        <div class="lighter italics">
+          <br />
+          Click this button after adding files and entering data below.
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -61,7 +65,7 @@
         </ion-select>
       </div>
       <div class="item-delete">
-        <ion-icon name="close" (click)="fileUploadControl.removeFile(item)"></ion-icon>
+        <ion-icon class="cursor-pointer" name="close" (click)="fileUploadControl.removeFile(item)"></ion-icon>
       </div>
     </ion-item>
   </ion-list>
