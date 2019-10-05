@@ -203,10 +203,12 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
         console.log("ERROR: ", error);
         dataService.delete("movie", file['id']).subscribe(
           res => {
-            console.log("s3Create bucket upload failed and db rollback succeeded", res);
+            file['errorMessage'] = "s3Create bucket upload failed and db rollback succeeded";
+            console.log(file['errorMessage'], res);
           },
           error => {
-            console.log("s3Create bucket upload failed and db rollback failed", error);
+            file['errorMessage'] = "s3Create bucket upload failed and db rollback failed";
+            console.log(file['errorMessage'], error);
           }
         )
       }
