@@ -42,8 +42,8 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
   public fileUploadControl = new FileUploadControl().setListVisibility(false);
 
   private bucket = new S3({
-    accessKeyId: 'AKIA6A22SIVVXAHGJJON--',
-    secretAccessKey: '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--',
+    accessKeyId: 'AKIA6A22SIVVXAHGJJON',
+    secretAccessKey: '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',
     region: 'us-west-1'
   });
 
@@ -189,6 +189,9 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
   }
 
   s3Create(file: any) {
+    delete file['success'];
+    delete file['errorMessage'];
+
     let params = {
       Bucket: 'gallo-movies',
       Key: file.name,
@@ -197,6 +200,7 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
 
     this.bucket.upload(params, function (error, data) {
       if(data) {
+        file['success'] = true;
         console.log("DATA: ", data);
       }
       else if(error) {
