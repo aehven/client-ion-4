@@ -15,7 +15,8 @@ const routes: Routes = [
   { path: 'notification/:id', loadChildren: './notification/notification.module#NotificationPageModule' },
   { path: 'notifications', loadChildren: './notifications/notifications.module#NotificationsPageModule' },
   { path: 'terms-and-conditions', loadChildren: './terms-and-conditions/terms-and-conditions.module#TermsAndConditionsPageModule' },
-  { path: 'movies', loadChildren: './movies/movies.module#MoviesPageModule' }
+  { path: 'movies', loadChildren: './movies/movies.module#MoviesPageModule' },
+  { path: 'new-movies', loadChildren: './new-movies/new-movies.module#NewMoviesPageModule' }
 ];
 
 @NgModule({

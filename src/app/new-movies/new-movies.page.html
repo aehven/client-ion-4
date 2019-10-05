@@ -1,0 +1,51 @@
+<div *ngIf="gotIt" class="got-new-movies">GOT IT</div>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="secondary">
+    <ion-icon name="arrow-dropup" (click)="top()"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<app-header title="New {{Klasses}}"></app-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row align-items-center>
+      <ion-col size="12" size-sm>
+        <file-upload [control]="fileUploadControl"></file-upload>
+      </ion-col>
+      <ion-col size="12" size-sm align-self-center class="center">
+        <ion-button id="top" color="success" (click)="performUpload()" [disabled]="!uploadAllowed()">
+          Go
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list>
+    <ion-item>
+      <div class="item-url">File Name</div>
+      <div class="item-time">Start</div>
+      <div class="item-time">End</div>
+      <div class="item-time">Winnner</div>
+    </ion-item>
+
+    <ion-item *ngFor="let item of fileUploadControl.value; let i = index">
+      <div class="item-url">
+        {{item.name}}
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.start" placeholder="mm:ss"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.end" placeholder="mm:ss"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-select placeholder="Select One" [(ngModel)]="item.winner">
+          <ion-select-option value="ROJO">ROJO</ion-select-option>
+          <ion-select-option value="VERDE">VERDE</ion-select-option>
+        </ion-select>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

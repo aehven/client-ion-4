@@ -27,7 +27,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
         if(err.status == 401) {
           if(err.url.indexOf("sign_in") == -1) {
-            this.sessionService.anonymousSignIn();
+            if(environment.allowAnonymousUsers) {
+              this.sessionService.anonymousSignIn();
+            }
+            else {
+              this.router.navigate(['/login']);
+            }
           }
         }
         else if(err.status == 403) {

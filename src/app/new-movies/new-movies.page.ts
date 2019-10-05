@@ -1,3 +1,5 @@
+import { environment } from '../../environments/environment';
+
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
@@ -14,11 +16,11 @@ import * as S3 from 'aws-sdk/clients/s3';
 import { FileUploadControl } from '@iplab/ngx-file-upload';
 
 @Component({
-  selector: 'app-movies',
-  templateUrl: './movies.page.html',
-  styleUrls: ['./movies.page.scss'],
+  selector: 'app-new-movies',
+  templateUrl: './new-movies.page.html',
+  styleUrls: ['./new-movies.page.scss'],
 })
-export class MoviesPage implements OnInit, AfterViewInit {
+export class NewMoviesPage implements OnInit, AfterViewInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public klass = "movie";
@@ -35,7 +37,7 @@ export class MoviesPage implements OnInit, AfterViewInit {
   public pageSize = 10;
 
   public fileUploadControl = new FileUploadControl().setListVisibility(false);
-
+  public
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
@@ -98,7 +100,54 @@ export class MoviesPage implements OnInit, AfterViewInit {
     element.scrollIntoView();
   }
 
-  change(item) {
-    this.dataService.update(this.klass, item.id, item);
+  fileEvent(fileInput: any) {
+    const bucket = new S3({
+      accessKeyId: 'AKIA6A22SIVVXAHGJJON',
+      secretAccessKey: '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',
+      region: 'us-west-1'
+    });
+
+    for(let file of fileInput.target.files) {
+      console.log(file.name);
+
+      let params = {
+        Bucket: 'gallo-movies',
+        Key: file.name,
+        Body: file
+      };
+
+      bucket.upload(params, function (err, data) {
+        console.log("DATA: ", data);
+        console.log("ERROR: ", err);
+      });
+    }
+  }
+
+  uploadAllowed():boolean {
+    if(this.fileUploadControl.value.length < 1) {
+      return false;
+    }
+
+    for(let file of this.fileUploadControl.value) {
+      if(
+        file['start'] === undefined ||
+        file['start'].length < 3 ||
+        file['end'] === undefined ||
+        file['end'].length < 3 ||
+        file['winner'] === undefined ||
+        file['winner'].length < 3
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  performUpload() {
+    for(let file of this.fileUploadControl.value) {
+      console.log(file.name);
+      console.log(file);
+    }
   }
 }

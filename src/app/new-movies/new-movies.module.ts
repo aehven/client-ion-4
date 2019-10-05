@@ -5,13 +5,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MoviesPage } from './movies.page';
+import { NewMoviesPage } from './new-movies.page';
 import { SharedModule } from '../shared/shared.module';
+
+import { FileUploadModule } from '@iplab/ngx-file-upload';
 
 const routes: Routes = [
   {
     path: '',
-    component: MoviesPage
+    component: NewMoviesPage
   }
 ];
 
@@ -21,8 +23,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    FileUploadModule
   ],
-  declarations: [MoviesPage]
+  declarations: [NewMoviesPage]
 })
-export class MoviesPageModule {}
+export class NewMoviesPageModule {}

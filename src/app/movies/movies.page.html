@@ -1,4 +1,4 @@
-<div *ngIf="gotIt" class="got-user-list">GOT IT</div>
+<div *ngIf="gotIt" class="got-movies">GOT IT</div>
 
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
   <ion-fab-button color="secondary">
@@ -12,9 +12,9 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-sm>
-        <ion-button id="top" color="primary" (click)="newItem();"
-          *ngIf="sessionService.currentUser?.can('create', 'User')">
-          New {{Klass}}
+        <ion-button id="top" color="primary" routerLink="/new-movies"
+          *ngIf="sessionService.currentUser?.can('create', 'Movie')">
+          New {{Klasses}}
         </ion-button>
       </ion-col>
       <ion-col size="12" size-sm>
@@ -27,48 +27,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
-  <input type="file" (change)="fileEvent($event)" multiple/>
-
-  <file-upload [control]="fileUploadControl"></file-upload>
-
-  <div class="file-list" *ngIf="fileUploadControl.value.length > 0">
-      <div class="file-item"
-          *ngFor="let file of fileUploadControl.value"
-          (click)="fileUploadControl.removeFile(file)">
-          {{ file.name }}
-      </div>
-  </div>
-
-  <ion-list>
-    <ion-item>
-      <div class="item-url">URL</div>
-      <div class="item-time">Start</div>
-      <div class="item-time">End</div>
-      <div class="item-time">Winnner</div>
-      <div class="item-go"></div>
-    </ion-item>
-
-    <ion-item *ngFor="let item of fileUploadControl.value">
-      <div class="item-url">
-        <ion-input type="text" [(ngModel)]="item.name" (change)="change(item)"></ion-input>
-      </div>
-      <div class="item-time">
-        <ion-input [(ngModel)]="item.start" (change)="change(item)"></ion-input>
-      </div>
-      <div class="item-time">
-        <ion-input [(ngModel)]="item.end" (change)="change(item)"></ion-input>
-      </div>
-      <div class="item-time">
-        <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="change(item)">
-          <ion-select-option value="ROJO">ROJO</ion-select-option>
-          <ion-select-option value="VERDE">VERDE</ion-select-option>
-        </ion-select>
-      </div>
-      <div class="item-go"><a href="{{item.url}}" target="_blank"><ion-icon name="open"></ion-icon></a></div>
-    </ion-item>
-  </ion-list>
-
 
   <ion-list>
     <ion-item>
