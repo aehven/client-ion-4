@@ -4,10 +4,15 @@
 
 .item-time {
   text-align: right;
+  width: 6rem;
+}
+
+.item-winner {
+  text-align: right;
   width: 9rem;
 }
 
-.item-go {
+.item-delete, .item-go {
   text-align: right;
   width: 3rem;
 }

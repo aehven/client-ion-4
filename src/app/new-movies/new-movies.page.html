@@ -33,7 +33,8 @@
       <div class="item-url">File Name</div>
       <div class="item-time">Start</div>
       <div class="item-time">End</div>
-      <div class="item-time">Winnner</div>
+      <div class="item-winner center">Winnner</div>
+      <div class="item-delete"></div>
     </ion-item>
 
     <ion-item *ngFor="let item of fileUploadControl.value; let i = index">
@@ -52,12 +53,15 @@
       <div class="item-time">
         <ion-input [(ngModel)]="item.end" placeholder="mm:ss"></ion-input>
       </div>
-      <div class="item-time">
+      <div class="item-winner">
         <ion-select placeholder="Select One" [(ngModel)]="item.winner">
           <ion-select-option value="ROJO">ROJO</ion-select-option>
           <ion-select-option value="VERDE">VERDE</ion-select-option>
           <ion-select-option value="VERDE">TABLAS</ion-select-option>
         </ion-select>
+      </div>
+      <div class="item-delete">
+        <ion-icon name="close" (click)="fileUploadControl.removeFile(item)"></ion-icon>
       </div>
     </ion-item>
   </ion-list>
