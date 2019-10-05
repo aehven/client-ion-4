@@ -32,7 +32,12 @@
 
     <ion-item *ngFor="let item of fileUploadControl.value; let i = index">
       <div class="item-url">
-        {{item.name}}
+        <div [ngClass]="{'red': item['errorMessage'], 'green': item['success']}">
+          {{item.name}}
+        </div>
+        <div *ngIf="item['errorMessage']" class="red">
+          {{item['errorMessage']}}
+        </div>
       </div>
       <div class="item-time">
         <ion-input [(ngModel)]="item.start" placeholder="mm:ss"></ion-input>
@@ -44,6 +49,7 @@
         <ion-select placeholder="Select One" [(ngModel)]="item.winner">
           <ion-select-option value="ROJO">ROJO</ion-select-option>
           <ion-select-option value="VERDE">VERDE</ion-select-option>
+          <ion-select-option value="VERDE">TABLAS</ion-select-option>
         </ion-select>
       </div>
     </ion-item>

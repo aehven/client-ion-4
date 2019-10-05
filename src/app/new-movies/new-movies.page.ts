@@ -1,4 +1,5 @@
-import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/shareReplay'; //this can go away when updating to rxjs 6.4?; requires npm install rxjs-compat
 
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,6 +15,8 @@ import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 
 import { FileUploadControl } from '@iplab/ngx-file-upload';
+
+let dataService = null;
 
 @Component({
   selector: 'app-new-movies',
@@ -37,7 +40,13 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
   public pageSize = 10;
 
   public fileUploadControl = new FileUploadControl().setListVisibility(false);
-  public
+
+  private bucket = new S3({
+    accessKeyId: 'AKIA6A22SIVVXAHGJJON--',
+    secretAccessKey: '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--',
+    region: 'us-west-1'
+  });
+
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
@@ -52,6 +61,8 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
         this.loadData();
       }
     })
+
+    dataService = this.dataService;
   }
 
   ngAfterViewInit() {
@@ -100,30 +111,26 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     element.scrollIntoView();
   }
 
-  fileEvent(fileInput: any) {
-    const bucket = new S3({
-      accessKeyId: 'AKIA6A22SIVVXAHGJJON',
-      secretAccessKey: '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',
-      region: 'us-west-1'
-    });
-
-    for(let file of fileInput.target.files) {
-      console.log(file.name);
-
-      let params = {
-        Bucket: 'gallo-movies',
-        Key: file.name,
-        Body: file
-      };
-
-      bucket.upload(params, function (err, data) {
-        console.log("DATA: ", data);
-        console.log("ERROR: ", err);
-      });
-    }
-  }
+  // fileEvent(fileInput: any) {
+  //   for(let file of fileInput.target.files) {
+  //     console.log(file.name);
+  //
+  //     let params = {
+  //       Bucket: 'gallo-movies',
+  //       Key: file.name,
+  //       Body: file
+  //     };
+  //
+  //     bucket.upload(params, function (err, data) {
+  //       console.log("DATA: ", data);
+  //       console.log("ERROR: ", err);
+  //     });
+  //   }
+  // }
 
   uploadAllowed():boolean {
+    return true;
+
     if(this.fileUploadControl.value.length < 1) {
       return false;
     }
@@ -148,6 +155,61 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     for(let file of this.fileUploadControl.value) {
       console.log(file.name);
       console.log(file);
+      file['url'] = `https://gallo-movies.s3-us-west-1.amazonaws.com/${file.name}`;
+
+      this.dbCreate(file).subscribe(
+        res => {
+          this.s3Create(file);
+          // if(!this.s3Create(file)) {
+          //   this.dataService.delete(this.klass, file['id'])
+          // }
+        }
+      )
     }
+  }
+
+  dbCreate(file: any): Observable<any> {
+    delete file['success'];
+    delete file['errorMessage'];
+
+    let response = this.dataService.create(this.klass, file);
+    response.subscribe(
+      res =>  {
+        console.log("dbCreate", res);
+        file['success'] = true;
+        file['id'] = res.id;
+      },
+      error => {
+        console.error("dbCreate", error);
+        file['errorMessage'] = error.error.message || "Unknown Error";
+      }
+    );
+
+    return response;
+  }
+
+  s3Create(file: any) {
+    let params = {
+      Bucket: 'gallo-movies',
+      Key: file.name,
+      Body: file
+    };
+
+    this.bucket.upload(params, function (error, data) {
+      if(data) {
+        console.log("DATA: ", data);
+      }
+      else if(error) {
+        console.log("ERROR: ", error);
+        dataService.delete("movie", file['id']).subscribe(
+          res => {
+            console.log("s3Create bucket upload failed and db rollback succeeded", res);
+          },
+          error => {
+            console.log("s3Create bucket upload failed and db rollback failed", error);
+          }
+        )
+      }
+    });
   }
 }
