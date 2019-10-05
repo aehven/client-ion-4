@@ -12,7 +12,13 @@
   <ion-grid>
     <ion-row align-items-center>
       <ion-col size="12" size-sm>
-        <file-upload [control]="fileUploadControl"></file-upload>
+        <!-- https://github.com/pIvan/file-upload -->
+        <file-upload [control]="fileUploadControl">
+          <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+              <span *ngIf="isFileDragDropAvailable">Click or drag and drop files here.</span>
+              <span *ngIf="!isFileDragDropAvailable">Click here to add files.</span>
+          </ng-template>
+        </file-upload>
       </ion-col>
       <ion-col size="12" size-sm align-self-center class="center">
         <ion-button id="top" color="success" (click)="performUpload()" [disabled]="!uploadAllowed()">
@@ -38,6 +44,7 @@
         <div *ngIf="item['errorMessage']" class="red">
           {{item['errorMessage']}}
         </div>
+        <ion-progress-bar *ngIf="item['processing']" type="indeterminate"></ion-progress-bar>
       </div>
       <div class="item-time">
         <ion-input [(ngModel)]="item.start" placeholder="mm:ss"></ion-input>

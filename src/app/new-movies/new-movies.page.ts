@@ -111,26 +111,7 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     element.scrollIntoView();
   }
 
-  // fileEvent(fileInput: any) {
-  //   for(let file of fileInput.target.files) {
-  //     console.log(file.name);
-  //
-  //     let params = {
-  //       Bucket: 'gallo-movies',
-  //       Key: file.name,
-  //       Body: file
-  //     };
-  //
-  //     bucket.upload(params, function (err, data) {
-  //       console.log("DATA: ", data);
-  //       console.log("ERROR: ", err);
-  //     });
-  //   }
-  // }
-
   uploadAllowed():boolean {
-    return true;
-
     if(this.fileUploadControl.value.length < 1) {
       return false;
     }
@@ -172,16 +153,20 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     delete file['success'];
     delete file['errorMessage'];
 
+    file['processing'] = true;
+
     let response = this.dataService.create(this.klass, file);
     response.subscribe(
       res =>  {
         console.log("dbCreate", res);
         file['success'] = true;
         file['id'] = res.id;
+        delete file['processing'];
       },
       error => {
         console.error("dbCreate", error);
         file['errorMessage'] = error.error.message || "Unknown Error";
+        delete file['processing'];
       }
     );
 
@@ -198,10 +183,12 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
       Body: file
     };
 
+    file['processing'] = true;
     this.bucket.upload(params, function (error, data) {
       if(data) {
         file['success'] = true;
         console.log("DATA: ", data);
+        delete file['processing'];
       }
       else if(error) {
         console.log("ERROR: ", error);
@@ -209,10 +196,12 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
           res => {
             file['errorMessage'] = "s3Create bucket upload failed and db rollback succeeded";
             console.log(file['errorMessage'], res);
+            delete file['processing'];
           },
           error => {
             file['errorMessage'] = "s3Create bucket upload failed and db rollback failed";
             console.log(file['errorMessage'], error);
+            delete file['processing'];
           }
         )
       }
