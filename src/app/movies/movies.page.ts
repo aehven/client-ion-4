@@ -13,6 +13,8 @@ import * as S3 from 'aws-sdk/clients/s3';
 
 import { FileUploadControl } from '@iplab/ngx-file-upload';
 
+let proxy = null;
+
 @Component({
   selector: 'app-movies',
   templateUrl: './movies.page.html',
@@ -36,6 +38,12 @@ export class MoviesPage implements OnInit, AfterViewInit {
 
   public fileUploadControl = new FileUploadControl().setListVisibility(false);
 
+  private s3 = new S3({
+    accessKeyId: 'AKIA6A22SIVVXAHGJJON',
+    secretAccessKey: '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',
+    region: 'us-west-1'
+  });
+
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
@@ -49,7 +57,9 @@ export class MoviesPage implements OnInit, AfterViewInit {
         this.page = 0;
         this.loadData();
       }
-    })
+    });
+
+    proxy = this;
   }
 
   ngAfterViewInit() {
@@ -99,12 +109,53 @@ export class MoviesPage implements OnInit, AfterViewInit {
   }
 
   change(item) {
-    this.dataService.update(this.klass, item.id, item);
+    this.dataService.update(this.klass, item.id, item).subscribe(
+      data => {
+        console.log("changed: ", data);
+      },
+      error => {
+        console.error("not changed", error);
+      }
+    )
   }
 
-  delete(id) {
+  delete(item) {
     if(confirm("Are you sure?")) {
-      console.log("delete", id);
+      item.processing = true;
+      this.dataService.delete(this.klass, item.id).subscribe(
+        data => {
+          console.log("deleted", data);
+          this.s3Delete(item);
+        },
+        error => {
+          console.error("not deleted", error);
+          item.errorMessage = `Couldn't delete from DB: ${error}`;
+          this.s3Delete(item);
+        }
+      )
     }
+  }
+
+  s3Delete(item:any) {
+    let key = item.url.substring(item.url.lastIndexOf('/') + 1)
+    console.log("s3Delete", key);
+
+    let params = {
+      Bucket: 'gallo-movies',
+      Key: key
+    };
+
+    this.s3.deleteObject(params, function(error, data) {
+      if(data) {
+        console.log("s3Delete", data);
+        proxy.loadData();
+        delete item['processing'];
+      }
+      else if(error) {
+        console.log("s3Delete failed", error);
+        delete item['processing'];
+        item.errorMessage = `${item.errorMessage}; ${error}`;
+      }
+    });
   }
 }

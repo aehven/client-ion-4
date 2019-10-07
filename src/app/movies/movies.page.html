@@ -41,6 +41,10 @@
     <ion-item *ngFor="let item of data">
       <div class="item-url">
         <ion-input type="text" [(ngModel)]="item.url" (change)="change(item)"></ion-input>
+        <div *ngIf="item['errorMessage']" class="red">
+          {{item['errorMessage']}}
+        </div>
+        <ion-progress-bar *ngIf="item['processing']" type="indeterminate"></ion-progress-bar>
       </div>
       <div class="item-time">
         <ion-input [(ngModel)]="item.start" (change)="change(item)"></ion-input>
@@ -56,7 +60,7 @@
         </ion-select>
       </div>
       <div class="item-go"><a href="{{item.url}}" target="_blank"><ion-icon name="open"></ion-icon></a></div>
-      <div class="item-delete"><ion-icon name="trash" class="red cursor-pointer" (click)="delete(item.id)"></ion-icon></div>
+      <div class="item-delete"><ion-icon name="trash" class="red cursor-pointer" (click)="delete(item)"></ion-icon></div>
     </ion-item>
   </ion-list>
 
