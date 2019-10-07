@@ -101,4 +101,10 @@ export class MoviesPage implements OnInit, AfterViewInit {
   change(item) {
     this.dataService.update(this.klass, item.id, item);
   }
+
+  delete(id) {
+    if(confirm("Are you sure?")) {
+      console.log("delete", id);
+    }
+  }
 }

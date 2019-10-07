@@ -35,6 +35,7 @@
       <div class="item-time">End</div>
       <div class="item-winner">Winnner</div>
       <div class="item-go"></div>
+      <div class="item-delete"></div>
     </ion-item>
 
     <ion-item *ngFor="let item of data">
@@ -55,6 +56,7 @@
         </ion-select>
       </div>
       <div class="item-go"><a href="{{item.url}}" target="_blank"><ion-icon name="open"></ion-icon></a></div>
+      <div class="item-delete"><ion-icon name="trash" class="red cursor-pointer" (click)="delete(item.id)"></ion-icon></div>
     </ion-item>
   </ion-list>
 
