@@ -13,8 +13,6 @@ import * as S3 from 'aws-sdk/clients/s3';
 
 import { FileUploadControl } from '@iplab/ngx-file-upload';
 
-let proxy = null;
-
 @Component({
   selector: 'app-movies',
   templateUrl: './movies.page.html',
@@ -57,9 +55,7 @@ export class MoviesPage implements OnInit, AfterViewInit {
         this.page = 0;
         this.loadData();
       }
-    });
-
-    proxy = this;
+    })
   }
 
   ngAfterViewInit() {
@@ -148,7 +144,7 @@ export class MoviesPage implements OnInit, AfterViewInit {
     this.s3.deleteObject(params, function(error, data) {
       if(data) {
         console.log("s3Delete", data);
-        proxy.loadData();
+        item.deleted = true
         delete item['processing'];
       }
       else if(error) {
