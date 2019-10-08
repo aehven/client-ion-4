@@ -23,7 +23,14 @@
           [(ngModel)]="searchTerm"
           (ionChange)="search()"
           dbounce="500"
-          ></ion-searchbar>
+          >
+          </ion-searchbar>
+      </ion-col>
+      <ion-col size="12" size-sm>
+        <ion-item lines="none">
+          <ion-label>Errors only</ion-label>
+          <ion-checkbox color="primary" checked slot="start" [(ngModel)]="errorsOnly" (ionChange)="search()"></ion-checkbox>
+        </ion-item>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -38,9 +45,10 @@
       <div class="item-delete"></div>
     </ion-item>
 
-    <ion-item *ngFor="let item of data" [ngClass]="{'deleted': item.deleted}">
+    <ion-item *ngFor="let item of data" [ngClass]="{'deleted': item.deleted, 'red bolder': item.error}">
       <div class="item-url">
         <ion-input type="text" [(ngModel)]="item.url" (change)="change(item)"></ion-input>
+        <div *ngIf="item.error">{{item.error}}</div>
       </div>
       <div class="item-time">
         <ion-input [(ngModel)]="item.start" (change)="change(item)"></ion-input>

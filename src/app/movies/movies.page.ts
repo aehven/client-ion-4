@@ -30,6 +30,7 @@ export class MoviesPage implements OnInit, AfterViewInit {
   public data: any[] = [];
 
   public searchTerm = "";
+  public errorsOnly:boolean = false;
   public collectionSize = 1;
   public page = 0;
   public pageSize = 10;
@@ -72,7 +73,7 @@ export class MoviesPage implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
+    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, errors_only: this.errorsOnly})
     .subscribe( data => {
       for(let item of data[pluralize(this.klass)]) {
         this.data.push(item);
@@ -94,6 +95,7 @@ export class MoviesPage implements OnInit, AfterViewInit {
   }
 
   search(): void {
+    this.collectionSize = 9999999; //force reload in loadData when search terms change
     this.page = 0;
     this.data = [];
     this.loadData();
