@@ -51,10 +51,10 @@
         <div *ngIf="item.error">{{item.error}}</div>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item.start" (change)="change(item)"></ion-input>
+        <ion-input [(ngModel)]="item.start" (change)="change(item)" [ngClass]="{'error bolder': item.startError}"></ion-input>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item.end" (change)="change(item)"></ion-input>
+        <ion-input [(ngModel)]="item.end" (change)="change(item)" [ngClass]="{'error bolder': item.endError}"></ion-input>
       </div>
       <div class="item-winner">
         <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="change(item)">

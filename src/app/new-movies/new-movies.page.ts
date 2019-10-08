@@ -47,6 +47,8 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     region: 'us-west-1'
   });
 
+  private timeRegex = new RegExp(/^[0-5]?\d:[0-5]\d$/); // thanks to https://stackoverflow.com/a/49132992
+
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
@@ -111,19 +113,34 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     element.scrollIntoView();
   }
 
+  checkItem(item) {
+    delete item['startError'];
+    delete item['endError'];
+    delete item['winnerError'];
+
+    if(!this.timeRegex.test(item.start)) {
+      item.startError = true;
+    }
+
+    if(!this.timeRegex.test(item.end)) {
+      item.endError = true;
+    }
+
+    if(!['ROJO', 'VERDE', 'TABLAS'].includes(item.winner)) {
+      item.winnerError = true;
+    }
+  }
+
   uploadAllowed():boolean {
     if(this.fileUploadControl.value.length < 1) {
       return false;
     }
 
     for(let file of this.fileUploadControl.value) {
-      if(
-        file['start'] === undefined ||
-        file['start'].length < 3 ||
-        file['end'] === undefined ||
-        file['end'].length < 3 ||
-        file['winner'] === undefined ||
-        file['winner'].length < 3
+      if(!(
+        this.timeRegex.test(file['start']) &&
+        this.timeRegex.test(file['end']) &&
+        ['ROJO', 'VERDE', 'TABLAS'].includes(file['winner']))
       ) {
         return false;
       }

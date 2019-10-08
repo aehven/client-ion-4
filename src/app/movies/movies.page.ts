@@ -107,6 +107,21 @@ export class MoviesPage implements OnInit, AfterViewInit {
   }
 
   change(item) {
+    let regex = new RegExp(/^[0-5]?\d:[0-5]\d$/); // thanks to https://stackoverflow.com/a/49132992
+
+    delete item['startError'];
+    delete item['endError'];
+
+    if(!regex.test(item.start)) {
+      item.startError = true;
+      return;
+    }
+
+    if(!regex.test(item.end)) {
+      item.endError = true;
+      return;
+    }
+
     this.dataService.update(this.klass, item.id, item).subscribe(
       data => {
         console.log("changed: ", data);

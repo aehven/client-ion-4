@@ -37,7 +37,7 @@
       <div class="item-url">File Name</div>
       <div class="item-time">Start</div>
       <div class="item-time">End</div>
-      <div class="item-winner center">Winnner</div>
+      <div class="item-winner-new center">Winnner</div>
       <div class="item-delete"></div>
     </ion-item>
 
@@ -52,13 +52,13 @@
         <ion-progress-bar *ngIf="item['processing']" type="indeterminate"></ion-progress-bar>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item.start" placeholder="mm:ss"></ion-input>
+        <ion-input [(ngModel)]="item.start" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.startError}"></ion-input>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item.end" placeholder="mm:ss"></ion-input>
+        <ion-input [(ngModel)]="item.end" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.endError}"></ion-input>
       </div>
-      <div class="item-winner">
-        <ion-select placeholder="Select One" [(ngModel)]="item.winner">
+      <div class="item-winner-new">
+        <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="checkItem(item)" [ngClass]="{'error bolder': item.winnerError}">
           <ion-select-option value="ROJO">ROJO</ion-select-option>
           <ion-select-option value="VERDE">VERDE</ion-select-option>
           <ion-select-option value="VERDE">TABLAS</ion-select-option>
