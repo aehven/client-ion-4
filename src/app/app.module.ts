@@ -38,7 +38,7 @@ import { AppRoutingModule } from './app-routing.module';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    AngularTokenModule.forRoot({apiBase: environment.apiPath}),
+    AngularTokenModule.forRoot(environment.production ? {} : {apiBase: `${environment.apiPath}`, apiPath: null})
   ],
   providers: [
     StatusBar,
