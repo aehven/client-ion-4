@@ -67,13 +67,6 @@ export class TrashPage implements OnInit, AfterViewInit {
     this.s3List();
   }
 
-  search(): void {
-    this.collectionSize = 9999999; //force reload in loadData when search terms change
-    this.page = 0;
-    this.data = [];
-    this.loadData();
-  }
-
   top(): void {
     let element = document.getElementById("top");
     element.scrollIntoView();
@@ -94,15 +87,6 @@ export class TrashPage implements OnInit, AfterViewInit {
       item.endError = true;
       return;
     }
-
-    this.dataService.update(this.klass, item.id, item).subscribe(
-      data => {
-        console.log("changed: ", data);
-      },
-      error => {
-        console.error("not changed", error);
-      }
-    )
   }
 
   s3List() {
@@ -149,24 +133,33 @@ export class TrashPage implements OnInit, AfterViewInit {
   putBack(item) {
     item.processing = true;
 
-    let key = item.url.substring(item.url.lastIndexOf('/') + 1);
-
-    this.S3Service.copyObject({Bucket: "gallo-movies", CopySource: `gallo-trash/${key}`, Key: key}).subscribe(
+    this.dataService.create(this.klass, item).subscribe(
       data => {
-        item.copied = true;
-        this.S3Service.deleteObject({Bucket: 'gallo-trash', Key: key}).subscribe(
+        console.log("putBack created: ", data);
+
+        let key = item.url.substring(item.url.lastIndexOf('/') + 1);
+
+        this.S3Service.copyObject({Bucket: "gallo-movies", CopySource: `gallo-trash/${key}`, Key: key}).subscribe(
           data => {
-            item.deleted = true
-            delete item['processing'];
+            item.copied = true;
+            this.S3Service.deleteObject({Bucket: 'gallo-trash', Key: key}).subscribe(
+              data => {
+                item.deleted = true
+                delete item['processing'];
+              },
+              error => {
+                delete item['processing'];
+                item.errorMessage = `Copied to active but can't delete from trash: ${error}`
+              }
+            );
           },
           error => {
-            delete item['processing'];
-            item.errorMessage = `Copied to active but can't delete from trash: ${error}`
+            item.errorMessage = `Can't copy from trash to active: ${error}`
           }
-        );
+        )
       },
       error => {
-        item.errorMessage = `Can't copy from trash to active: ${error}`
+        console.error("putBack failed creation", error);
       }
     )
   }

@@ -122,20 +122,20 @@ export class MoviesPage implements OnInit, AfterViewInit {
   }
 
   delete(item) {
-    // if(confirm("Are you sure?")) {
-    //   item.processing = true;
-    //   this.dataService.delete(this.klass, item.id).subscribe(
-    //     data => {
-    //       console.log("deleted", data);
+    if(confirm("Are you sure?")) {
+      item.processing = true;
+      this.dataService.delete(this.klass, item.id).subscribe(
+        data => {
+          console.log("deleted", data);
           this.trash(item);
-    //     },
-    //     error => {
-    //       console.error("not deleted", error);
-    //       item.errorMessage = `Couldn't delete from DB: ${error}`;
-    //       this.trash(item);
-    //     }
-    //   )
-    // }
+        },
+        error => {
+          console.error("not deleted", error);
+          item.errorMessage = `Couldn't delete from DB: ${error}`;
+          this.trash(item);
+        }
+      )
+    }
   }
 
   trash(item) {

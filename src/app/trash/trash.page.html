@@ -55,7 +55,8 @@
           <ion-select-option value="TABLAS">TABLAS</ion-select-option>
         </ion-select>
       </div>
-      <div class="item-put-back" [ngClass]="{'grey cursor-default': item.hasError, 'cursor-pointer': !item.hasError}" (click)="putBack(item)"><ion-icon name="undo"></ion-icon></div>
+      <div class="item-put-back" [ngClass]="{'grey cursor-default': item.hasError, 'cursor-pointer': !item.hasError}" (click)="putBack(item)">
+        <ion-icon *ngIf="!item.deleted" name="undo"></ion-icon></div>
     </ion-item>
   </ion-list>
 
