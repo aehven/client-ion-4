@@ -9,7 +9,7 @@
         <ion-row color="primary" justify-content-center>
 
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
-            <div padding>
+            <div class="ion-padding">
               <ion-item *ngIf="customers?.length > 0 && sessionService?.currentUser?.can('create', 'Customer')">
                 <ion-select placeholder="Parent customer" formControlName="parent_id">
                   <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>

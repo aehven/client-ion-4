@@ -10,17 +10,6 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-sm>
-         <ion-searchbar
-          placeholder="Search by name"
-          [(ngModel)]="searchTerm"
-          (ionChange)="search()"
-          dbounce="500"
-          >
-          </ion-searchbar>
-      </ion-col>
-    </ion-row>
     <ion-row class="italics ion-padding">
       <ion-col>
         To return an item from the trash to the active movie list, enter its data below and click its <ion-icon name="undo"></ion-icon> icon.
@@ -60,11 +49,13 @@
     </ion-item>
   </ion-list>
 
-  <div padding *ngIf="data.length < collectionSize; else endOfData" class="grey">
-    Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+  <div *ngIf="data.length < collectionSize; else endOfData">
+    <div class="grey ion-padding">
+      Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+    </div>
   </div>
   <ng-template #endOfData>
-    <div padding class="grey">
+    <div class="grey ion-padding">
       No more {{klasses}}.
     </div>
   </ng-template>

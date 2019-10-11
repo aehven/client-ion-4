@@ -91,17 +91,17 @@ export class TrashPage implements OnInit, AfterViewInit {
 
   s3List() {
     this.gotIt = false;
-    this.S3Service.listObjects({Bucket: 'gallo-trash', MaxKeys: 1000, ContinuationToken: this.nextContinuationToken}).subscribe(
+    this.S3Service.listObjects({Bucket: 'gallo-trash', MaxKeys: 1, ContinuationToken: this.nextContinuationToken}).subscribe(
       data => {
         this.gotIt = true;
-        if(data.KeyCount == 0) {
-          this.collectionSize = this.data.length;
+        this.nextContinuationToken = data.NextContinuationToken;
+
+        for(let item of data.Contents) {
+          this.data.push({url: item.Key, hasError: false})
         }
-        else {
-          for(let item of data.Contents) {
-            this.data.push({url: item.Key, hasError: false})
-          }
-          this.nextContinuationToken = data.NextContinuationToken;
+
+        if(!this.nextContinuationToken) {
+          this.collectionSize = this.data.length;
         }
       },
       error => {
