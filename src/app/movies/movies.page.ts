@@ -122,35 +122,45 @@ export class MoviesPage implements OnInit, AfterViewInit {
   }
 
   delete(item) {
-    if(confirm("Are you sure?")) {
-      item.processing = true;
-      this.dataService.delete(this.klass, item.id).subscribe(
-        data => {
-          console.log("deleted", data);
-          this.s3Delete(item);
-        },
-        error => {
-          console.error("not deleted", error);
-          item.errorMessage = `Couldn't delete from DB: ${error}`;
-          this.s3Delete(item);
-        }
-      )
-    }
+    // if(confirm("Are you sure?")) {
+    //   item.processing = true;
+    //   this.dataService.delete(this.klass, item.id).subscribe(
+    //     data => {
+    //       console.log("deleted", data);
+          this.trash(item);
+    //     },
+    //     error => {
+    //       console.error("not deleted", error);
+    //       item.errorMessage = `Couldn't delete from DB: ${error}`;
+    //       this.trash(item);
+    //     }
+    //   )
+    // }
   }
 
-  s3Delete(item:any) {
-    let key = item.url.substring(item.url.lastIndexOf('/') + 1)
-    console.log("s3Delete", key);
+  trash(item) {
+    item.processing = true;
 
-    this.S3Service.deleteObject({Bucket: 'gallo-movies', Key: key}).subscribe(
+    let key = item.url.substring(item.url.lastIndexOf('/') + 1);
+
+    this.S3Service.copyObject({Bucket: "gallo-trash", CopySource: `gallo-movies/${key}`, Key: key}).subscribe(
       data => {
-        item.deleted = true
-        delete item['processing'];
+        item.copied = true;
+        this.S3Service.deleteObject({Bucket: 'gallo-movies', Key: key}).subscribe(
+          data => {
+            item.deleted = true
+            delete item['processing'];
+          },
+          error => {
+            delete item['processing'];
+            item.errorMessage = `Copied to trash but can't delete from active: ${error}`
+          }
+        );
       },
       error => {
+        item.errorMessage = `Can't copy from active to trash: ${error}`;
         delete item['processing'];
-        item.errorMessage = `${item.errorMessage}; ${error}`;
       }
-    );
+    )
   }
 }

@@ -149,10 +149,12 @@ export class TrashPage implements OnInit, AfterViewInit {
   putBack(item) {
     item.processing = true;
 
-    this.S3Service.copyObject({Bucket: "gallo-movies", CopySource: `gallo-trash/${encodeURI(item.url)}`, Key: item.url}).subscribe(
+    let key = item.url.substring(item.url.lastIndexOf('/') + 1);
+
+    this.S3Service.copyObject({Bucket: "gallo-movies", CopySource: `gallo-trash/${key}`, Key: key}).subscribe(
       data => {
         item.copied = true;
-        this.S3Service.deleteObject({Bucket: 'gallo-trash', Key: item.url}).subscribe(
+        this.S3Service.deleteObject({Bucket: 'gallo-trash', Key: key}).subscribe(
           data => {
             item.deleted = true
             delete item['processing'];

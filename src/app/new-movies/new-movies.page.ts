@@ -53,7 +53,7 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
       if(params["reload"]) {
         this.data = [];
         this.page = 0;
-        this.loadData();
+        // this.loadData();
       }
     })
 
@@ -61,45 +61,45 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.loadData();
+    // this.loadData();
   }
 
-  public loadData(event:any=null) {
-    if(this.data.length >= this.collectionSize) {
-      if(event) {
-        event.target.complete();
-      }
-      return;
-    }
-
-    this.page += 1;
-    this.gotIt = false;
-    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
-    .subscribe( data => {
-      for(let item of data[pluralize(this.klass)]) {
-        this.data.push(item);
-      }
-      this.collectionSize = data['meta']['total'];
-      this.gotIt = true;
-      if(event) {
-        event.target.complete();
-      }
-    });
-  }
-
-  selectItem(id: number): void {
-    this.router.navigate([`/${this.klass}/${id}`]);
-  }
-
-  newItem(): void {
-    this.router.navigate([`/${this.klass}/new`]);
-  }
-
-  search(): void {
-    this.page = 0;
-    this.data = [];
-    this.loadData();
-  }
+  // public loadData(event:any=null) {
+  //   if(this.data.length >= this.collectionSize) {
+  //     if(event) {
+  //       event.target.complete();
+  //     }
+  //     return;
+  //   }
+  //
+  //   this.page += 1;
+  //   this.gotIt = false;
+  //   this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
+  //   .subscribe( data => {
+  //     for(let item of data[pluralize(this.klass)]) {
+  //       this.data.push(item);
+  //     }
+  //     this.collectionSize = data['meta']['total'];
+  //     this.gotIt = true;
+  //     if(event) {
+  //       event.target.complete();
+  //     }
+  //   });
+  // }
+  //
+  // selectItem(id: number): void {
+  //   this.router.navigate([`/${this.klass}/${id}`]);
+  // }
+  //
+  // newItem(): void {
+  //   this.router.navigate([`/${this.klass}/new`]);
+  // }
+  //
+  // search(): void {
+  //   this.page = 0;
+  //   this.data = [];
+  //   this.loadData();
+  // }
 
   top(): void {
     let element = document.getElementById("top");
@@ -151,9 +151,6 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
       this.dbCreate(file).subscribe(
         res => {
           this.s3Create(file);
-          // if(!this.s3Create(file)) {
-          //   this.dataService.delete(this.klass, file['id'])
-          // }
         }
       )
     }

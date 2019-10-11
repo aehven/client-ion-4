@@ -48,7 +48,10 @@
     <ion-item *ngFor="let item of data" [ngClass]="{'deleted': item['deleted'], 'red bolder': item['error']}">
       <div class="item-url">
         <ion-input type="text" [(ngModel)]="item.url" (change)="change(item)"></ion-input>
-        <div *ngIf="item.error">{{item.error}}</div>
+        <div *ngIf="item['errorMessage']" class="red">
+          {{item['errorMessage']}}
+        </div>
+        <ion-progress-bar *ngIf="item['processing']" type="indeterminate"></ion-progress-bar>
       </div>
       <div class="item-time">
         <ion-input [(ngModel)]="item['start']" (change)="change(item)" [ngClass]="{'error bolder': item['startError']}"></ion-input>
@@ -68,8 +71,8 @@
     </ion-item>
   </ion-list>
 
-  <div *ngIf="data.length < collectionSize; else endOfData" class="grey ionic-padding">
-    Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+  <div *ngIf="data.length < collectionSize; else endOfData" class="grey">
+    &nbsp;&nbsp;Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
   </div>
   <ng-template #endOfData>
     <div class="grey ionic-padding">
@@ -80,7 +83,7 @@
   <ion-infinite-scroll threshold="80%" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
-      loadingText="Loading more {{klasses}}...">
+      loadingText="&nbsp;&nbsp;Loading more {{klasses}}...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 <ion-content>
