@@ -7,11 +7,7 @@ import { pluralize, titleize } from 'inflected';
 import { DataService } from '../services/data.service';
 import { StorageService } from '../services/storage.service';
 import { SessionService } from '../services/session.service';
-
-import * as AWS from 'aws-sdk/global';
-import * as S3 from 'aws-sdk/clients/s3';
-
-import { FileUploadControl } from '@iplab/ngx-file-upload';
+import { S3Service } from '../services/s3.service';
 
 @Component({
   selector: 'app-movies',
@@ -35,18 +31,11 @@ export class MoviesPage implements OnInit, AfterViewInit {
   public page = 0;
   public pageSize = 10;
 
-  public fileUploadControl = new FileUploadControl().setListVisibility(false);
-
-  private s3 = new S3({
-    accessKeyId: 'AKIA6A22SIVVXAHGJJON',
-    secretAccessKey: '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',
-    region: 'us-west-1'
-  });
-
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
     private route: ActivatedRoute,
+    private S3Service: S3Service,
     public router: Router) {}
 
   ngOnInit() {
@@ -153,22 +142,15 @@ export class MoviesPage implements OnInit, AfterViewInit {
     let key = item.url.substring(item.url.lastIndexOf('/') + 1)
     console.log("s3Delete", key);
 
-    let params = {
-      Bucket: 'gallo-movies',
-      Key: key
-    };
-
-    this.s3.deleteObject(params, function(error, data) {
-      if(data) {
-        console.log("s3Delete", data);
+    this.S3Service.deleteObject({Bucket: 'gallo-movies', Key: key}).subscribe(
+      data => {
         item.deleted = true
         delete item['processing'];
-      }
-      else if(error) {
-        console.log("s3Delete failed", error);
+      },
+      error => {
         delete item['processing'];
         item.errorMessage = `${item.errorMessage}; ${error}`;
       }
-    });
+    );
   }
 }

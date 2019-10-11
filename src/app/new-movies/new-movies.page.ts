@@ -10,9 +10,7 @@ import { pluralize, titleize } from 'inflected';
 import { DataService } from '../services/data.service';
 import { StorageService } from '../services/storage.service';
 import { SessionService } from '../services/session.service';
-
-import * as AWS from 'aws-sdk/global';
-import * as S3 from 'aws-sdk/clients/s3';
+import { S3Service } from '../services/s3.service';
 
 import { FileUploadControl } from '@iplab/ngx-file-upload';
 
@@ -41,18 +39,13 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
 
   public fileUploadControl = new FileUploadControl().setListVisibility(false);
 
-  private bucket = new S3({
-    accessKeyId: 'AKIA6A22SIVVXAHGJJON',
-    secretAccessKey: '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',
-    region: 'us-west-1'
-  });
-
   private timeRegex = new RegExp(/^[0-5]?\d:[0-5]\d$/); // thanks to https://stackoverflow.com/a/49132992
 
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
     private route: ActivatedRoute,
+    private S3Service: S3Service,
     public router: Router) {}
 
   ngOnInit() {
@@ -190,38 +183,36 @@ export class NewMoviesPage implements OnInit, AfterViewInit {
     return response;
   }
 
+  dbDelete(file: any) {
+    dataService.delete("movie", file['id']).subscribe(
+      res => {
+        file['errorMessage'] = "s3Create bucket upload failed and db rollback succeeded";
+        console.log(file['errorMessage'], res);
+        delete file['processing'];
+      },
+      error => {
+        file['errorMessage'] = "s3Create bucket upload failed and db rollback failed";
+        console.log(file['errorMessage'], error);
+        delete file['processing'];
+      }
+    )
+  }
+
   s3Create(file: any) {
     delete file['success'];
     delete file['errorMessage'];
 
-    let params = {
-      Bucket: 'gallo-movies',
-      Key: file.name,
-      Body: file
-    };
-
     file['processing'] = true;
-    this.bucket.upload(params, function (error, data) {
-      if(data) {
+
+    this.S3Service.upload({Bucket: 'gallo-movies', Key: file.name, Body: file}).subscribe(
+      data => {
         file['success'] = true;
-        console.log("DATA: ", data);
+        delete file['processing'];
+      },
+      error => {
+        this.dbDelete(file);
         delete file['processing'];
       }
-      else if(error) {
-        console.log("ERROR: ", error);
-        dataService.delete("movie", file['id']).subscribe(
-          res => {
-            file['errorMessage'] = "s3Create bucket upload failed and db rollback succeeded";
-            console.log(file['errorMessage'], res);
-            delete file['processing'];
-          },
-          error => {
-            file['errorMessage'] = "s3Create bucket upload failed and db rollback failed";
-            console.log(file['errorMessage'], error);
-            delete file['processing'];
-          }
-        )
-      }
-    });
+    )
   }
 }

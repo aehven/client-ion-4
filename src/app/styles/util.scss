@@ -66,6 +66,10 @@ button:hover {
   cursor: pointer;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
 .spin {
   animation-name: spin;
   animation-duration: 1s;

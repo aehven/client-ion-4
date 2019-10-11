@@ -6,17 +6,11 @@
   </ion-fab-button>
 </ion-fab>
 
-<app-header title="{{Klasses}}"></app-header>
+<app-header title="Trash"></app-header>
 
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col size="12" size-sm>
-        <ion-button id="top" color="primary" routerLink="/new-movies"
-          *ngIf="sessionService.currentUser?.can('create', 'Movie')">
-          New {{Klasses}}
-        </ion-button>
-      </ion-col>
       <ion-col size="12" size-sm>
          <ion-searchbar
           placeholder="Search by name"
@@ -26,35 +20,33 @@
           >
           </ion-searchbar>
       </ion-col>
-      <ion-col size="12" size-sm>
-        <ion-item lines="none">
-          <ion-label>Errors only</ion-label>
-          <ion-checkbox color="primary" checked slot="start" [(ngModel)]="errorsOnly" (ionChange)="search()"></ion-checkbox>
-        </ion-item>
+    </ion-row>
+    <ion-row class="italics ion-padding">
+      <ion-col>
+        To return an item from the trash to the active movie list, enter its data below and click its <ion-icon name="undo"></ion-icon> icon.
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <ion-list>
     <ion-item>
-      <div class="item-url">URL</div>
+      <div class="item-url">File Name</div>
       <div class="item-time">Start</div>
       <div class="item-time">End</div>
       <div class="item-winner">Winnner</div>
-      <div class="item-go"></div>
-      <div class="item-delete"></div>
+      <div class="item-put-back"></div>
     </ion-item>
 
-    <ion-item *ngFor="let item of data" [ngClass]="{'deleted': item['deleted'], 'red bolder': item['error']}">
+    <ion-item *ngFor="let item of data" [ngClass]="{'deleted': item.deleted, 'red bolder': item.error}">
       <div class="item-url">
         <ion-input type="text" [(ngModel)]="item.url" (change)="change(item)"></ion-input>
         <div *ngIf="item.error">{{item.error}}</div>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item['start']" (change)="change(item)" [ngClass]="{'error bolder': item['startError']}"></ion-input>
+        <ion-input [(ngModel)]="item.start" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.startError}"></ion-input>
       </div>
       <div class="item-time">
-        <ion-input [(ngModel)]="item['end']" (change)="change(item)" [ngClass]="{'error bolder': item['endError']}"></ion-input>
+        <ion-input [(ngModel)]="item.end" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.endError}"></ion-input>
       </div>
       <div class="item-winner">
         <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="change(item)">
@@ -63,16 +55,15 @@
           <ion-select-option value="TABLAS">TABLAS</ion-select-option>
         </ion-select>
       </div>
-      <div class="item-go"><a *ngIf="!item.deleted" href="{{item.url}}" target="_blank"><ion-icon name="open"></ion-icon></a></div>
-      <div class="item-delete"><ion-icon *ngIf="!item.deleted" name="trash" class="red cursor-pointer" (click)="delete(item)"></ion-icon></div>
+      <div class="item-put-back" [ngClass]="{'grey cursor-default': item.hasError, 'cursor-pointer': !item.hasError}" (click)="putBack(item)"><ion-icon name="undo"></ion-icon></div>
     </ion-item>
   </ion-list>
 
-  <div *ngIf="data.length < collectionSize; else endOfData" class="grey ionic-padding">
+  <div padding *ngIf="data.length < collectionSize; else endOfData" class="grey">
     Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
   </div>
   <ng-template #endOfData>
-    <div class="grey ionic-padding">
+    <div padding class="grey">
       No more {{klasses}}.
     </div>
   </ng-template>

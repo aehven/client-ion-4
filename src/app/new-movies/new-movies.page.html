@@ -65,7 +65,7 @@
         </ion-select>
       </div>
       <div class="item-delete">
-        <ion-icon class="cursor-pointer" name="close" (click)="fileUploadControl.removeFile(item)"></ion-icon>
+        <ion-icon *ngIf="!item['success']" class="cursor-pointer" name="close" (click)="fileUploadControl.removeFile(item)"></ion-icon>
       </div>
     </ion-item>
   </ion-list>
