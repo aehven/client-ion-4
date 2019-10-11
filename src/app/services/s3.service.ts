@@ -51,4 +51,36 @@ export class S3Service {
       });
     });
   }
+
+  listObjects(params): Observable<any> {
+    return Observable.create(observer => {
+      this.s3.listObjectsV2(params, function(error, data) {
+        if(data) {
+          console.log("listObjects", data);
+          observer.next(data);
+          observer.complete();
+        }
+        else if(error) {
+          console.log("listObjects failed", error);
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  copyObject(params): Observable<any> {
+    return Observable.create(observer => {
+      this.s3.copyObject(params, function(error, data) {
+        if(data) {
+          console.log("copyObject", data);
+          observer.next(data);
+          observer.complete();
+        }
+        else if(error) {
+          console.log("copyObject failed", error);
+          observer.error(error);
+        }
+      });
+    });
+  }
 }

@@ -7,11 +7,7 @@ import { pluralize, titleize } from 'inflected';
 import { DataService } from '../services/data.service';
 import { StorageService } from '../services/storage.service';
 import { SessionService } from '../services/session.service';
-
-import * as AWS from 'aws-sdk/global';
-import * as S3 from 'aws-sdk/clients/s3';
-
-var proxy = null;
+import { S3Service } from '../services/s3.service';
 
 @Component({
   selector: 'app-trash',
@@ -39,16 +35,11 @@ export class TrashPage implements OnInit, AfterViewInit {
 
   private nextContinuationToken = null;
 
-  private s3 = new S3({
-    accessKeyId: 'AKIA6A22SIVVXAHGJJON',
-    secretAccessKey: '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',
-    region: 'us-west-1'
-  });
-
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
     private route: ActivatedRoute,
+    private S3Service: S3Service,
     public router: Router) {}
 
   ngOnInit() {
@@ -59,8 +50,6 @@ export class TrashPage implements OnInit, AfterViewInit {
         this.loadData();
       }
     })
-
-    proxy = this;
   }
 
   ngAfterViewInit() {
@@ -117,38 +106,24 @@ export class TrashPage implements OnInit, AfterViewInit {
   }
 
   s3List() {
-    // scrolling isn't working, so we're getting 1000 and hoping that's all.
-    // repeated fetches after end of list get the same list again instead of empty contents.
-
-    let params = {
-      Bucket: 'gallo-trash',
-      MaxKeys: 1000,
-      ContinuationToken: this.nextContinuationToken
-    };
-
-    this.s3.listObjectsV2(params, function(error, data) {
-      this.gotIt = false;
-
-      if(data) {
-        proxy.gotIt = true;
-
-        console.log("s3List data", data);
-
+    this.gotIt = false;
+    this.S3Service.listObjects({Bucket: 'gallo-trash', MaxKeys: 1000, ContinuationToken: this.nextContinuationToken}).subscribe(
+      data => {
+        this.gotIt = true;
         if(data.KeyCount == 0) {
-          proxy.collectionSize = proxy.data.length;
+          this.collectionSize = this.data.length;
         }
         else {
           for(let item of data.Contents) {
-            proxy.data.push({url: item.Key, hasError: false})
+            this.data.push({url: item.Key, hasError: false})
           }
-
-          proxy.nextMarker = data.NextContinuationToken;
+          this.nextContinuationToken = data.NextContinuationToken;
         }
+      },
+      error => {
+
       }
-      else if(error) {
-        console.error("s3List", error);
-      }
-    });
+    )
   }
 
   checkItem(item) {
@@ -172,23 +147,25 @@ export class TrashPage implements OnInit, AfterViewInit {
   }
 
   putBack(item) {
-    this.s3Copy(item);
-  }
+    item.processing = true;
 
-  s3Copy(item) {
-    let params = {
-      Bucket: "gallo-movies",
-      CopySource: `gallo-trash/${encodeURI(item.url)}`,
-      Key: item.url
-    }
-
-    this.s3.copyObject(params, function(error, data) {
-      if(data) {
+    this.S3Service.copyObject({Bucket: "gallo-movies", CopySource: `gallo-trash/${encodeURI(item.url)}`, Key: item.url}).subscribe(
+      data => {
         item.copied = true;
+        this.S3Service.deleteObject({Bucket: 'gallo-trash', Key: item.url}).subscribe(
+          data => {
+            item.deleted = true
+            delete item['processing'];
+          },
+          error => {
+            delete item['processing'];
+            item.errorMessage = `Copied to active but can't delete from trash: ${error}`
+          }
+        );
+      },
+      error => {
+        item.errorMessage = `Can't copy from trash to active: ${error}`
       }
-      else if(error) {
-        console.log("s3Copy", error);
-      }
-    })
+    )
   }
 }
