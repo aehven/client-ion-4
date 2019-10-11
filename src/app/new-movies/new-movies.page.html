@@ -10,7 +10,7 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row align-items-center>
+    <ion-row class="ion-align-items-center">
       <ion-col size="12" size-sm>
         <!-- https://github.com/pIvan/file-upload -->
         <file-upload [control]="fileUploadControl">
@@ -20,11 +20,11 @@
           </ng-template>
         </file-upload>
       </ion-col>
-      <ion-col size="12" size-sm align-self-center class="center">
+      <ion-col size="12" size-sm class="ion-align-self-center center">
         <ion-button id="top" color="success" (click)="performUpload()" [disabled]="!uploadAllowed()">
           Upload Now
         </ion-button>
-        <div class="lighter italics">
+        <div class="grey italics">
           <br />
           Click this button after adding files and entering data below.
         </div>
