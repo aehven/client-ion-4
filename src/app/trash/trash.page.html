@@ -1,0 +1,69 @@
+<div *ngIf="gotIt" class="got-movies">GOT IT</div>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="secondary">
+    <ion-icon name="arrow-dropup" (click)="top()"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<app-header title="Trash"></app-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="grey italics ion-padding">
+      <ion-col>
+        To return an item from the trash to the active movie list, enter its data below and click its <ion-icon name="undo"></ion-icon> icon.
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list>
+    <ion-item>
+      <div class="item-url">File Name</div>
+      <div class="item-time">Start</div>
+      <div class="item-time">End</div>
+      <div class="item-winner">Winnner</div>
+      <div class="item-put-back"></div>
+    </ion-item>
+
+    <ion-item *ngFor="let item of data" [ngClass]="{'deleted': item.deleted, 'red bolder': item.error}">
+      <div class="item-url">
+        <ion-input type="text" [(ngModel)]="item.url" (change)="change(item)"></ion-input>
+        <div *ngIf="item.error">{{item.error}}</div>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.start" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.startError}"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.end" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.endError}"></ion-input>
+      </div>
+      <div class="item-winner">
+        <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="change(item)">
+          <ion-select-option value="ROJO">ROJO</ion-select-option>
+          <ion-select-option value="VERDE">VERDE</ion-select-option>
+          <ion-select-option value="TABLAS">TABLAS</ion-select-option>
+        </ion-select>
+      </div>
+      <div class="item-put-back" [ngClass]="{'grey cursor-default': item.hasError, 'cursor-pointer': !item.hasError}" (click)="putBack(item)">
+        <ion-icon *ngIf="!item.deleted" name="undo"></ion-icon></div>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="data.length < collectionSize; else endOfData">
+    <div class="grey ion-padding">
+      Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+    </div>
+  </div>
+  <ng-template #endOfData>
+    <div class="grey ion-padding">
+      No more {{klasses}}.
+    </div>
+  </ng-template>
+
+  <ion-infinite-scroll threshold="80%" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more {{klasses}}...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+<ion-content>

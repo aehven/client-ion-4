@@ -192,10 +192,10 @@ export class SessionService {
   }
 
   goHome(): void {
-    if(this.currentUser.tac_agreed_at == null) {
-      this.router.navigate(['terms-and-conditions']);
-    }
-    else {
+    // if(this.currentUser.tac_agreed_at == null) {
+    //   this.router.navigate(['terms-and-conditions']);
+    // }
+    // else {
       let redirect = this.storage.getStr("redirectAfterLogin");
       if(redirect) {
         this.storage.remove("redirectAfterLogin");
@@ -204,6 +204,6 @@ export class SessionService {
       else {
         this.router.navigate([environment.homePath]);
       }
-    }
+    // }
   }
 }

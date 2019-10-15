@@ -1,0 +1,72 @@
+<div *ngIf="gotIt" class="got-new-movies">GOT IT</div>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="secondary">
+    <ion-icon name="arrow-dropup" (click)="top()"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<app-header title="New {{Klasses}}"></app-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="12" size-sm>
+        <!-- https://github.com/pIvan/file-upload -->
+        <file-upload [control]="fileUploadControl">
+          <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+              <span *ngIf="isFileDragDropAvailable">Click or drag and drop files here.</span>
+              <span *ngIf="!isFileDragDropAvailable">Click here to add files.</span>
+          </ng-template>
+        </file-upload>
+      </ion-col>
+      <ion-col size="12" size-sm class="ion-align-self-center center">
+        <ion-button id="top" color="success" (click)="performUpload()" [disabled]="!uploadAllowed()">
+          Upload Now
+        </ion-button>
+        <div class="grey italics">
+          <br />
+          Click this button after adding files and entering data below.
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list>
+    <ion-item>
+      <div class="item-url">File Name</div>
+      <div class="item-time">Start</div>
+      <div class="item-time">End</div>
+      <div class="item-winner-new center">Winnner</div>
+      <div class="item-delete"></div>
+    </ion-item>
+
+    <ion-item *ngFor="let item of fileUploadControl.value; let i = index">
+      <div class="item-url">
+        <div [ngClass]="{'red': item['errorMessage'], 'green': item['success']}">
+          {{item.name}}
+        </div>
+        <div *ngIf="item['errorMessage']" class="red">
+          {{item['errorMessage']}}
+        </div>
+        <ion-progress-bar *ngIf="item['processing']" type="indeterminate"></ion-progress-bar>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.start" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.startError}"></ion-input>
+      </div>
+      <div class="item-time">
+        <ion-input [(ngModel)]="item.end" placeholder="mm:ss" (change)="checkItem(item)" [ngClass]="{'error bolder': item.endError}"></ion-input>
+      </div>
+      <div class="item-winner-new">
+        <ion-select placeholder="Select One" [(ngModel)]="item.winner" (ionChange)="checkItem(item)" [ngClass]="{'error bolder': item.winnerError}">
+          <ion-select-option value="ROJO">ROJO</ion-select-option>
+          <ion-select-option value="VERDE">VERDE</ion-select-option>
+          <ion-select-option value="VERDE">TABLAS</ion-select-option>
+        </ion-select>
+      </div>
+      <div class="item-delete">
+        <ion-icon *ngIf="!item['success']" class="cursor-pointer" name="close" (click)="fileUploadControl.removeFile(item)"></ion-icon>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -9,7 +9,7 @@
         <ion-row color="primary" justify-content-center>
 
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
-            <div padding>
+            <div class="ion-padding">
               <ion-item *ngIf="usersBelongToCustomers && sessionService?.currentUser?.can('index', 'Customer')">
                 <ion-select placeholder="Customer" formControlName="customer_id" (selectionChange)="customerChanged($event)">
                   <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>

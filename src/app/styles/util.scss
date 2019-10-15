@@ -19,7 +19,7 @@
 }
 
 .left {
-  text-align: left;
+  text-align: left !important;
 }
 
 .right {
@@ -64,6 +64,10 @@ button:hover {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.cursor-default {
+  cursor: default;
 }
 
 .spin {

@@ -34,11 +34,13 @@
     </ion-item>
   </ion-list>
 
-  <div padding *ngIf="data.length < collectionSize; else endOfData" class="grey">
-    Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+  <div *ngIf="data.length < collectionSize; else endOfData">
+    <div class="grey ion-padding">
+      Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+    </div>
   </div>
   <ng-template #endOfData>
-    <div padding class="grey">
+    <div class="grey ion-padding">
       No more {{klasses}}.
     </div>
   </ng-template>

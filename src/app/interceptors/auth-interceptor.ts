@@ -8,13 +8,10 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Rx';
 
-import { SessionService } from '../services/session.service';
-
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router,
-              private sessionService: SessionService) {}
+  constructor(private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
@@ -23,17 +20,8 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       })
       .catch(err => {
-        console.log('Caught error', err);
-
-        if(err.status == 401) {
-          if(err.url.indexOf("sign_in") == -1) {
-            this.sessionService.anonymousSignIn();
-          }
-        }
-        else if(err.status == 403) {
-          if(err.url.indexOf("validate_token") == -1 && err.url.indexOf("sign_in") == -1) {
-            this.router.navigate([environment.homePath]);
-          }
+        if(err.status == 401 || err.status == 403) {
+          this.router.navigate(['/login'], {queryParams: {anonymous: environment.allowAnonymousUsers}});
         }
 
         return Observable.throw(err);
