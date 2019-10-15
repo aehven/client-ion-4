@@ -31,6 +31,9 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    if(this.sessionService.isLoggedIn) {
+      this.sessionService.goHome();
+    }
     if(environment.allowAnonymousUsers) {
       this.route.queryParams.subscribe(params => {
         if(params["anonymous"]) {
