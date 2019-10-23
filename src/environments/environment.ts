@@ -1,9 +1,9 @@
 export const environment = {
   production: false,
-  apiPath: `http://localhost:3060`,
+  apiPath: `http://localhost:3030`,
   demoUser: "a@null.com",
   demoPassword: "password",
-  webSocketPath: `ws://localhost:3060/cable`,
+  webSocketPath: `ws://localhost:3030/cable`,
   homePath: "/home",
   allowAnonymousUsers: false,
   usersBelongToCustomers: false,
