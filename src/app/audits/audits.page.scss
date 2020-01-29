@@ -30,7 +30,7 @@ ion-item div {
 }
 
 .item-date {
-  width: 20%;
+  width: 15%;
 }
 
 .item-performer {
@@ -39,6 +39,7 @@ ion-item div {
 
 .item-event-type {
   width: 20%;
+  overflow-x: scroll !important;
 
   .item-event {
     text-decoration: underline;
@@ -55,5 +56,6 @@ ion-item div {
 }
 
 .item-go {
-  width: 5%;
+  width: 10%;
+  text-align: right;
 }
