@@ -22,19 +22,21 @@
       <ion-label>{{type}}</ion-label>
       <ion-checkbox slot="end" [(ngModel)]="includeAudits[type]" (ionChange)="inclusionChanged()"></ion-checkbox>
     </div>
+    <hr />
   </div>
+
 
   <ion-list>
     <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-      <div>{{item.created_at | date: 'short'}}</div>
-      <div>{{item.performed_by}}</div>
-      <div>
-        <span class="event">{{item.event | titlecase}}</span>
+      <div class="item-date">{{item.created_at | date: 'short'}}</div>
+      <div class="item-performer">{{item.performed_by}}</div>
+      <div class="item-event-type">
+        <span class="item-event">{{item.event | titlecase}}</span>
         <br />
-        <span class="type">{{item.item_type}}</span>
+        <span class="item-type">{{item.item_type}}</span>
         {{item.item_string}}
       </div>
-      <div [innerHTML]="item | prettyChangeset" style="overflow-x: scroll"></div>
+      <div class="item-changeset" [innerHTML]="item | prettyChangeset"></div>
       <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
     </ion-item>
   </ion-list>

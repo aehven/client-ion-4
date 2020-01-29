@@ -1,3 +1,8 @@
+hr {
+  width: 80%;
+  background: #eee;
+}
+
 ion-item div {
   white-space: nowrap;
   padding-right: 1em;
@@ -22,4 +27,33 @@ ion-item div {
   ion-checkbox {
     vertical-align: middle;
   }
+}
+
+.item-date {
+  width: 20%;
+}
+
+.item-performer {
+  width: 20%;
+}
+
+.item-event-type {
+  width: 20%;
+
+  .item-event {
+    text-decoration: underline;
+  }
+
+  .item-type {
+    font-weight: bold;
+  }
+}
+
+.item-changeset {
+  width: 35%;
+  overflow-x: scroll !important;
+}
+
+.item-go {
+  width: 5%;
 }
