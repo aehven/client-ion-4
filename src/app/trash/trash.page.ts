@@ -12,7 +12,7 @@ import { S3Service } from '../services/s3.service';
 @Component({
   selector: 'app-trash',
   templateUrl: './trash.page.html',
-  styleUrls: ['../movies/movies.page.scss'],
+  styleUrls: ['./trash.page.scss'],
 })
 export class TrashPage implements OnInit, AfterViewInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;

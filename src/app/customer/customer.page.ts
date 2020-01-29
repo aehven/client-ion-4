@@ -57,8 +57,8 @@ export class CustomerPage implements OnInit {
   get():void {
     this.gotIt = false;
     this.dataService.show(`${this.klass}`, + this.id)
-    .subscribe( data => {
-      this.form.patchValue(data);
+    .subscribe( resp => {
+      this.form.patchValue(resp['data']);
       if(this.form.controls['parent_id'].value != null || this.sessionService.currentUser.role == 'admin') {
         this.getCustomers();
       }
@@ -69,8 +69,8 @@ export class CustomerPage implements OnInit {
   }
 
   getCustomers(): void {
-    this.dataService.index("customers", {names_and_ids_only: true}).subscribe(data => {
-      this.customers = data.customers.filter(c => parseInt(c[0]) != parseInt(this.id));
+    this.dataService.index("customers", {names_and_ids_only: true}).subscribe(resp => {
+      this.customers = resp['data'].filter(c => parseInt(c[0]) != parseInt(this.id));
       this.gotIt = true;
     })
   }

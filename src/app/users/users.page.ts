@@ -64,11 +64,11 @@ export class UsersPage implements OnInit, AfterViewInit {
     this.page += 1;
     this.gotIt = false;
     this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
-    .subscribe( data => {
-      for(let item of data[pluralize(this.klass)]) {
+    .subscribe( resp => {
+      for(let item of resp['data']) {
         this.data.push(item);
       }
-      this.collectionSize = data['meta']['total'];
+      this.collectionSize = resp['meta']['total'];
       this.gotIt = true;
       if(event) {
         event.target.complete();

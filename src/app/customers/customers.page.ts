@@ -58,19 +58,19 @@ export class CustomersPage implements AfterViewInit, OnInit {
       this.page += 1;
       this.gotIt = false;
       this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
-      .subscribe( data => {
-        for(let item of data[pluralize(this.klass)]) {
+      .subscribe( resp => {
+        for(let item of resp['data']) {
           item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
           this.data.push(item);
         }
-        this.collectionSize = data['meta']['total'];
+        this.collectionSize = resp['meta']['total'];
         this.getCustomers(event);
       });
     }
 
     getCustomers(event:any=null): void {
-      this.dataService.index("customers").subscribe(data => {
-        this.customers = data.customers;
+      this.dataService.index(this.klasses).subscribe(resp => {
+        this.customers = resp['data'];
         this.gotIt = true;
         if(event) {
           event.target.complete();

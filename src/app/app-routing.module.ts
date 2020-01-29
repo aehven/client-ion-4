@@ -7,12 +7,13 @@ const routes: Routes = [
   { path: 'user/:id', loadChildren: './user/user.module#UserPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'users', loadChildren: './users/users.module#UsersPageModule' },
-  { path: 'home', loadChildren: './movies/movies.module#MoviesPageModule' },
   { path: 'customer/:id', loadChildren: './customer/customer.module#CustomerPageModule' },
   { path: 'customers', loadChildren: './customers/customers.module#CustomersPageModule' },
   { path: 'notification/:id', loadChildren: './notification/notification.module#NotificationPageModule' },
   { path: 'notifications', loadChildren: './notifications/notifications.module#NotificationsPageModule' },
-  { path: 'terms-and-conditions', loadChildren: './terms-and-conditions/terms-and-conditions.module#TermsAndConditionsPageModule' }
+  { path: 'terms-and-conditions', loadChildren: './terms-and-conditions/terms-and-conditions.module#TermsAndConditionsPageModule' },
+  // { path: 'audit/:id', loadChildren: './audit/audit.module#AuditPageModule' },
+  { path: 'audits', loadChildren: './audits/audits.module#AuditsPageModule' }
 ];
 
 @NgModule({

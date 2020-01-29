@@ -6,6 +6,6 @@ export const environment = {
   webSocketPath: `ws://localhost:3030/cable`,
   homePath: "/home",
   allowAnonymousUsers: false,
-  usersBelongToCustomers: false,
+  usersBelongToCustomers: true,
   version: "0.0.0"
 };

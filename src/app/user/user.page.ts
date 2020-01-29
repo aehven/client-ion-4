@@ -82,9 +82,9 @@ export class UserPage implements OnInit {
 
   get():void {
     this.dataService.show(`${this.klass}`, + this.id)
-    .subscribe( data => {
-      this.role = data['role'];
-      this.form.patchValue(data);
+    .subscribe( resp => {
+      this.role = resp['data']['role'];
+      this.form.patchValue(resp['data']);
       this.getCustomers();
     });
   }
