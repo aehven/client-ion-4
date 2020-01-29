@@ -3,7 +3,7 @@
 <app-header title="{{Klasses}}"></app-header>
 
 <ion-content>
-  <ion-grid>
+  <!-- <ion-grid>
     <ion-row>
       <ion-col size="12" size-sm>
          <ion-searchbar
@@ -14,7 +14,15 @@
           ></ion-searchbar>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
+
+  <div class="audit-types">
+    Show the following audits:
+    <div *ngFor="let type of auditTypes">
+      <ion-label>{{type}}</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="includeAudits[type]" (ionChange)="inclusionChanged()"></ion-checkbox>
+    </div>
+  </div>
 
   <ion-list>
     <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">

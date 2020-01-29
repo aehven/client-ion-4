@@ -33,6 +33,9 @@ export class AuditsPage implements OnInit, AfterViewInit {
 
   public usersBelongToCustomers = environment.usersBelongToCustomers;
 
+  public includeAudits = { User: true, Customer: true, Notification: true};
+  public auditTypes = Object.keys(this.includeAudits);
+
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
@@ -40,6 +43,11 @@ export class AuditsPage implements OnInit, AfterViewInit {
     public router: Router) {}
 
   ngOnInit() {
+    let stored = this.storage.getObj("includeAudits");
+    if(stored) {
+      Object.assign(this.includeAudits, stored);
+    }
+
     this.route.queryParams.subscribe(params => {
       if(params["reload"]) {
         this.data = [];
@@ -63,7 +71,7 @@ export class AuditsPage implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
+    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, include: JSON.stringify(this.includeAudits)})
     .subscribe( resp => {
       for(let item of resp['data']) {
         this.data.push(item);
@@ -85,8 +93,14 @@ export class AuditsPage implements OnInit, AfterViewInit {
   }
 
   search(): void {
+    this.collectionSize = 999999999;
     this.page = 0;
     this.data = [];
     this.loadData();
+  }
+
+  inclusionChanged(): void {
+    this.storage.setObj("includeAudits", this.includeAudits);
+    this.search();
   }
 }
