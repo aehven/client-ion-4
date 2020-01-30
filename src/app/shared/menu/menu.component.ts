@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 
@@ -9,6 +10,7 @@ import { SessionService } from '../../services/session.service';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
+  public usersBelongToCustomers = environment.usersBelongToCustomers;
 
   constructor(private menuController: MenuController, public sessionService: SessionService) { }
 
