@@ -1,25 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { TermsAndConditionsPage } from './terms-and-conditions.page';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: TermsAndConditionsPage
-  }
-];
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild([
+      {
+        path: '',
+        component: TermsAndConditionsPage
+      }
+    ]),
+    SharedModule
   ],
   declarations: [TermsAndConditionsPage]
 })
