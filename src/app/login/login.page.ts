@@ -25,8 +25,8 @@ export class LoginPage implements OnInit {
               public storage: StorageService,
               public dataService: DataService) {
     this.form = fb.group({
-      'email' : null,
-      'password': null
+      'email' : "admin@null.com",
+      'password': "password"
     })
   }
 
