@@ -19,4 +19,8 @@ export class MenuComponent implements OnInit {
   menuClicked() {
     this.menuController.close();
   }
+
+  toggleDark() {
+    document.body.classList.toggle('dark');
+  }
 }
