@@ -29,6 +29,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { SharedModule } from './shared/shared.module';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -38,7 +40,8 @@ import { AppRoutingModule } from './app-routing.module';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    AngularTokenModule.forRoot(environment.production ? {} : {apiBase: `${environment.apiPath}`, apiPath: null})
+    AngularTokenModule.forRoot(environment.production ? {} : {apiBase: `${environment.apiPath}`, apiPath: null}),
+    SharedModule
   ],
   providers: [
     StatusBar,
