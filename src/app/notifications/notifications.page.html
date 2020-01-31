@@ -23,14 +23,16 @@
   </ion-grid>
 
   <ion-list>
-    <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-      <div class="item-text">
+    <ion-item *ngFor="let item of data" class="cursor-pointer"> <!-- (click)="selectItem(item.id)" -->
+      <div class="item-level">
         <ion-chip color="success" *ngIf="item.level == 'Info'">Info</ion-chip>
         <ion-chip color="warning" *ngIf="item.level == 'Warning'">Warning</ion-chip>
         <ion-chip color="danger" *ngIf="item.level == 'Error'">Danger</ion-chip>
-        <!-- <b [ngClass]="{'Info': 'bg-blue white', 'Warning':'bg-orange white', 'Error':'bg-red white'}[item.level]">{{item.level}} </b> -->
-        <b>{{item.title}}: </b>{{item.text}}</div>
-      <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
+      </div>
+      <div class="item-text">
+        <b>{{item.title}}: </b>{{item.text}}
+      </div>
+      <!-- <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div> -->
     </ion-item>
   </ion-list>
 

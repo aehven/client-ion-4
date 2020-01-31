@@ -7,8 +7,11 @@ ion-item div {
   text-overflow: ellipsis;
 }
 
+.item-level {
+  width: 7rem;
+}
 .item-text {
-  width: 95%;
+  width: auto;
 }
 
 .item-go {
