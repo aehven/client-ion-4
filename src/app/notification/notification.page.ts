@@ -36,7 +36,7 @@ export class NotificationPage implements OnInit {
                   'text' : [null, Validators.required],
                   'level' : ["Warning"],
                   'expires_at' : [null],
-                  'in_app' : [null],
+                  'in_app' : [true],
                   'email' : [null],
                   'sms' : [null],
                   'action' : [null],

@@ -22,7 +22,7 @@ export class NotificationService {
       buttons: [
         {
           side: 'end',
-          text: notification['action'],
+          text: notification['action'] || "OK",
           handler: () => {
             if(notification['id']) {
               let resp = this.dataService.post(`users/${this.storage.getObj("currentUser")['id']}/acknowledge_notification`, {notification_id: notification['id']});
