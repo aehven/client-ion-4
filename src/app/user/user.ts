@@ -1,20 +1,18 @@
 export class User {
   id: any;
-  to_spend: any;
   email: any;
   first_name: any;
   last_name: any;
   role: any;
   address: any;
   phone: any;
-  team_id: number;
-  bonus_team_id: number;
   tac_agreed_at: Date;
   percent_change: number;
   minileague_id: number;
   permissions: any;
   wst: string;
-  customer_id;
+  customer_id: number;
+  jwt: string;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

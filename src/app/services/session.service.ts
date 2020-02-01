@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AngularTokenService } from 'angular-token';
-
 import { StorageService } from './storage.service';
 import { WebSocketsService } from './web-sockets.service';
 import { NotificationService } from './notification.service';
@@ -19,7 +17,7 @@ export class SessionService {
   private status: EventEmitter<string> = new EventEmitter();
   private user: User = null;
 
-  constructor(public tokenService: AngularTokenService,
+  constructor(
     private router: Router,
     private webSocketsService: WebSocketsService,
     public storage: StorageService,
@@ -79,7 +77,7 @@ export class SessionService {
   }
 
   get isLoggedIn(): any {
-    if(this.tokenService.currentAuthData) {
+    if(this.currentUser.jwt) {
       return true;
     }
     else {
@@ -88,30 +86,22 @@ export class SessionService {
   }
 
   get isStillLoggedIn(): any {
-    let response = this.tokenService.validateToken();
-    response.subscribe(
-        res =>      {
-          this.storage.setObj("currentUser", res.data);
-        },
-        error =>    console.log(error)
-    );
-
-    return response;
+    return true;
   }
 
   signIn(params: any): Observable<any> {
-    let res = this.tokenService.signIn(params);
+    let resp = this.dataService.post("/user_token ", {auth: params});
 
-    res.subscribe(data => {
-      this.user = new User(this.tokenService.currentUserData);
+    resp.subscribe(data => {
+      this.user = new User({email: params.email, jwt: data.jwt});
       console.log("logged in", this.user);
       this.storage.setObj("currentUser", this.user);
-      this.storage.serverEnv = this.user['server']; //data.body.data.server
+      // this.storage.serverEnv = this.user['server']; //data.body.data.server
 
       this.handleSignIn();
     })
 
-    return res;
+    return resp;
   }
 
   handleSignIn(): void {
@@ -131,34 +121,21 @@ export class SessionService {
       })
   }
 
-  signOut(): Observable<any> {
-    let res = this.tokenService.signOut();
+  signOut() {
+    this.webSocketsService.destroy();
+    this.status.emit("LoggedOut");
+    this.storage.clear();
 
-    res.subscribe(() => {
-      this.webSocketsService.destroy();
-      this.status.emit("LoggedOut");
-      this.storage.clear();
-
-      if(environment.allowAnonymousUsers) {
-        this.anonymousSignIn();
-      }
-      else {
-        this.router.navigate(['/login']);
-      }
-    });
-
-    return res;
-  }
-
-  resetPassword(params: any): Observable<any> {
-    let res = this.tokenService.resetPassword(params);
-
-    return res;
+    if(environment.allowAnonymousUsers) {
+      this.anonymousSignIn();
+    }
+    else {
+      this.router.navigate(['/login']);
+    }
   }
 
   get authData(): any {
-    let authData = this.tokenService.currentAuthData;
-    return authData;
+    return this.currentUser.jwt;
   }
 
   notificationDismissCallback() {
@@ -172,23 +149,32 @@ export class SessionService {
   getNotifications():void {
     console.log("getNotifications");
 
-    this.webSocketsService.connect("NotificationChannel", {}).subscribe(notification => {
-      console.log(`notification incoming message: ${notification}`);
-      this.notificationService.show(notification, this.notificationDismissCallback);
-    });
+    let connectionN = this.webSocketsService.connect("NotificationChannel", {});
+    if(connectionN) {
+      connectionN.subscribe(notification => {
+        console.log(`notification incoming message: ${notification}`);
+        this.notificationService.show(notification, this.notificationDismissCallback);
+      });
+    }
 
-    this.webSocketsService.connect("NotificationChannel", {user_id: this.user.id}).subscribe(notification => {
-      console.log(`notification incoming message: ${notification}`);
-      this.notificationService.show(notification, this.notificationDismissCallback);
-    });
+    let connectionNU  = this.webSocketsService.connect("NotificationChannel", {user_id: this.user.id})
+    if(connectionNU) {
+      connectionNU.subscribe(notification => {
+        console.log(`notification incoming message: ${notification}`);
+        this.notificationService.show(notification, this.notificationDismissCallback);
+      });
+    }
 
-    this.webSocketsService.connect("ConfigChannel", {}).subscribe(message => {
-      console.log(`config incoming message: ${JSON.stringify(message)}`);
+    let connectionC = this.webSocketsService.connect("ConfigChannel", {});
+    if(connectionC) {
+      connectionC.subscribe(message => {
+        console.log(`config incoming message: ${JSON.stringify(message)}`);
 
-      this.storage.serverEnv = message;
+        this.storage.serverEnv = message;
 
-      this.notificationService.show({text: "Config Update Available", action: "Reload"}, this.configDismissCallback);
-    });
+        this.notificationService.show({text: "Config Update Available", action: "Reload"}, this.configDismissCallback);
+      });
+    }
   }
 
   goHome(): void {

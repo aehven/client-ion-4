@@ -27,7 +27,6 @@
     "@ionic/angular": "^4.11.10",
     "@iplab/ngx-file-upload": "^1.4.3",
     "@types/inflected": "^1.1.29",
-    "angular-token": "^7.0.1",
     "angular2-actioncable": "^6.0.2",
     "aws-sdk": "^2.610.0",
     "cordova-android": "^8.1.0",

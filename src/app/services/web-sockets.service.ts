@@ -15,12 +15,12 @@ export class WebSocketsService implements OnDestroy {
 
   initialize(user: any): void {
     this.destroy();
-    if(user.email && user.wst) {
-      console.log("webSocketsService initialize", user.email, user.wst);
+    if(user.email && user.jwt) {
+      console.log("webSocketsService initialize", user.email, user.jwt);
       this.cable = this.cableService.cable(`${environment.webSocketPath}`,
         {
           uid: user.email,
-          wst: user.wst
+          jwt: user.jwt
         }
       );
     }
@@ -45,7 +45,7 @@ export class WebSocketsService implements OnDestroy {
   getChannel(channelName: string, params: any): Channel {
     let channelId = this.getChannelId(channelName, params);
 
-    if(!this.channels[channelId]) {
+    if(this.cable && !this.channels[channelId]) {
       console.log(`New Channel ID for ${channelName} / ${JSON.stringify(params)}: ${channelId}`);
       this.channels[channelId] = this.cable.channel(channelName, params);
     }
@@ -54,7 +54,13 @@ export class WebSocketsService implements OnDestroy {
   }
 
   connect(channelName: string, params: any): Observable<any> {
-    return this.getChannel(channelName, params).received(); //.shareReplay();
+    let channel = this.getChannel(channelName, params)
+    if(channel) {
+      return channel.received();
+    }
+    else {
+      return null;
+    }
   }
 
   disconnect(channelName: string, params: any): void {

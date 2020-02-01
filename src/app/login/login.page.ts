@@ -45,11 +45,11 @@ export class LoginPage implements OnInit {
 
   submitForm(form: FormGroup): void {
     this.sessionService.signIn({
-        login:    form.value.email.trim(),
+        email:    form.value.email.trim(),
         password: form.value.password.trim()
     }).subscribe(
-      res =>      {
-        this.storage.serverEnv = res.body.data.server;
+      _ =>      {
+        // this.storage.serverEnv = res.body.data.server;
         this.sessionService.goHome();
       },
       error => {
