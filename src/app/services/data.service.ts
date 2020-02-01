@@ -22,9 +22,6 @@ export class DataService {
       if(this.storage.getObj("current") == null) {
         this.storage.setObj("current", {});
       }
-
-      // this is for the graphics editor to see:
-      this.storage.setStr("apiPath", environment.apiPath);
     }
 
   public current = {};
