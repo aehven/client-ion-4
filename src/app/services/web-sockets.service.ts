@@ -19,7 +19,6 @@ export class WebSocketsService implements OnDestroy {
       console.log("webSocketsService initialize", user.email, user.jwt);
       this.cable = this.cableService.cable(`${environment.webSocketPath}`,
         {
-          uid: user.email,
           jwt: user.jwt
         }
       );
