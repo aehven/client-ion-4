@@ -19,7 +19,6 @@ export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: VersionInterceptor, multi: true }
 ];
 
-import { AngularTokenService,  AngularTokenModule,  AngularTokenOptions} from 'angular-token';
 import { ActionCableService } from 'angular2-actioncable';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -40,14 +39,12 @@ import { SharedModule } from './shared/shared.module';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    AngularTokenModule.forRoot(environment.production ? {} : {apiBase: `${environment.apiPath}`, apiPath: null}),
     SharedModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AngularTokenModule,
     ActionCableService,
     httpInterceptorProviders
   ],

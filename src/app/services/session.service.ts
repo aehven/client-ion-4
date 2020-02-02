@@ -96,7 +96,6 @@ export class SessionService {
       this.user = new User({email: params.email, jwt: data.jwt});
       console.log("logged in", this.user);
       this.storage.setObj("currentUser", this.user);
-      // this.storage.serverEnv = this.user['server']; //data.body.data.server
 
       this.handleSignIn();
     })
@@ -105,6 +104,12 @@ export class SessionService {
   }
 
   handleSignIn(): void {
+    let resp = this.dataService.get("/get_profile");
+    resp.subscribe(data => {
+      this.storage.serverEnv = data['server'];
+      this.user.mergeValues(data['profile']);
+      this.storage.setObj("currentUser", this.user);
+    })
     this.webSocketsService.initialize(this.user);
     this.getNotifications();
 

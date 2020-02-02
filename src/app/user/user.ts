@@ -15,9 +15,12 @@ export class User {
   jwt: string;
 
   constructor(values: Object = {}) {
-    Object.assign(this, values);
+    this.mergeValues(values);
   }
 
+  mergeValues(values: Object = {}) {
+    Object.assign(this, values);
+  }
   can(action: string, subject: string) {
     if(this._can(action, subject) && !this._cannot(action, subject)) {
       return true;
