@@ -26,7 +26,7 @@ export class VersionInterceptor implements HttpInterceptor {
           tap(event => {
               if(event instanceof HttpResponse) {
                 let serverVersion = event.headers.get('app-version');
-                if(serverVersion != environment.version) {
+                if(serverVersion && serverVersion != environment.version) {
                   this.notificationService.show({text: "Update Available", action: "REFRESH"}, this.update);
                 }
               }
