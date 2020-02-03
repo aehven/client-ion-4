@@ -6,7 +6,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 
 import { pluralize, titleize } from 'inflected';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 
 import { DataService } from '../services/data.service';
 import { StorageService } from '../services/storage.service';
@@ -126,7 +126,7 @@ export class UserPage implements OnInit {
     if(confirm("Are you sure?")) {
       this.dataService.delete(this.klass, this.id)
       .subscribe(
-        res => {
+        _ => {
           this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
         });
     }

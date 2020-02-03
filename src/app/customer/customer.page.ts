@@ -95,7 +95,7 @@ export class CustomerPage implements OnInit {
     if(confirm("Are you sure?")) {
       this.dataService.delete(this.klass, this.id)
       .subscribe(
-        res => {
+        _ => {
           this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
         });
     }
