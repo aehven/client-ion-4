@@ -76,7 +76,7 @@ export class NotificationPage implements OnInit {
     response.subscribe(
       res =>  {
         this.id = res['id'];
-        this.router.navigate([`/${pluralize(this.klass)}`]);
+        this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
       },
       error => {
         this.errorMessage = error.error.message;
@@ -89,7 +89,7 @@ export class NotificationPage implements OnInit {
       this.dataService.delete(this.klass, this.id)
       .subscribe(
         res => {
-          this.router.navigate([`/${pluralize(this.klass)}`]);
+          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
         });
     }
     else {

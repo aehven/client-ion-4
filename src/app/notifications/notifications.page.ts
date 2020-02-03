@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { pluralize, titleize } from 'inflected';
 
@@ -29,7 +29,18 @@ export class NotificationsPage implements AfterViewInit {
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
+    private route: ActivatedRoute,
     public router: Router) {}
+
+    ngOnInit() {
+      this.route.queryParams.subscribe(params => {
+        if(params["reload"]) {
+          this.data = [];
+          this.page = 0;
+          this.loadData();
+        }
+      })
+    }
 
     ngAfterViewInit() {
       this.loadData();

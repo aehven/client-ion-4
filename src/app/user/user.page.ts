@@ -127,7 +127,7 @@ export class UserPage implements OnInit {
       this.dataService.delete(this.klass, this.id)
       .subscribe(
         res => {
-          this.router.navigate([`/${pluralize(this.klass)}`]);
+          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
         });
     }
     else {
