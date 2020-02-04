@@ -18,14 +18,16 @@ export class AuthInterceptor implements HttpInterceptor {
 
     try {
       let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      let reqT = req.clone({
-        setHeaders: {
-          'Content-Type' : 'application/json; charset=utf-8',
-          'Accept'       : 'application/json',
-          'Authorization': `Bearer ${currentUser.jwt}`
-        },
-      });
-      req = reqT
+      if(currentUser && currentUser.jwt) {
+        let reqT = req.clone({
+          setHeaders: {
+            'Content-Type' : 'application/json; charset=utf-8',
+            'Accept'       : 'application/json',
+            'Authorization': `Bearer ${currentUser.jwt}`
+          },
+        });
+        req = reqT
+      }
     }
     catch(error) {
       console.warn("Couldn't set headers in auth interceptor");
