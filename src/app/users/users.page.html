@@ -22,25 +22,28 @@
     </ion-row>
   </ion-grid>
 
-  <ion-list>
-    <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-      <div class="item-name">{{item.last_name}}, {{item.first_name}}</div>
-      <div class="item-email">{{item.email}}</div>
-      <div class="item-role">{{item.role}}</div>
-      <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
-    </ion-item>
-  </ion-list>
+  <div class="users">
+    <ion-list>
+      <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
+        <div class="item-name">{{item.last_name}}, {{item.first_name}}</div>
+        <div class="item-customer-name">{{item.customer_name_with_ancestors}}</div>
+        <div class="item-email">{{item.email}}</div>
+        <div class="item-role">{{item.role}}</div>
+        <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
+      </ion-item>
+    </ion-list>
 
-  <div *ngIf="data.length < collectionSize; else endOfData">
-    <div class="grey ion-padding">
-      Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+    <div *ngIf="data.length < collectionSize; else endOfData">
+      <div class="grey ion-padding">
+        Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+      </div>
     </div>
+    <ng-template #endOfData>
+      <div class="grey ion-padding">
+        No more {{klasses}}.
+      </div>
+    </ng-template>
   </div>
-  <ng-template #endOfData>
-    <div class="grey ion-padding">
-      No more {{klasses}}.
-    </div>
-  </ng-template>
 
   <ion-infinite-scroll threshold="80%" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content
