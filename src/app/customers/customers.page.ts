@@ -18,6 +18,11 @@ export class CustomersPage implements AfterViewInit, OnInit {
   public klasses = pluralize(this.klass);
   public Klasses = pluralize(this.Klass);
 
+  public dklass = this.klass;
+  public dKlass = titleize(this.dklass);
+  public dklasses = pluralize(this.dklass);
+  public dKlasses = pluralize(this.dKlass);
+
   public data: any[] = [];
   public customers;
 
@@ -34,6 +39,11 @@ export class CustomersPage implements AfterViewInit, OnInit {
     public router: Router) {}
 
     ngOnInit() {
+      this.dklass = this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"];
+      this.dKlass = titleize(this.dklass);
+      this.dklasses = pluralize(this.dklass);
+      this.dKlasses = pluralize(this.dKlass);
+    
       this.route.queryParams.subscribe(params => {
         if(params["reload"]) {
           this.data = [];

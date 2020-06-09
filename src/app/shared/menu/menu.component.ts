@@ -2,7 +2,10 @@ import { environment } from '../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 
+import { pluralize, titleize } from 'inflected';
+
 import { SessionService } from '../../services/session.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-menu',
@@ -11,10 +14,15 @@ import { SessionService } from '../../services/session.service';
 })
 export class MenuComponent implements OnInit {
   public usersBelongToCustomers = environment.usersBelongToCustomers;
+  public aCustomerIsCalled = "customer";
 
-  constructor(private menuController: MenuController, public sessionService: SessionService) { }
+  constructor(private menuController: MenuController, 
+    public storage: StorageService,
+    public sessionService: SessionService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.aCustomerIsCalled = pluralize(titleize(this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"]));
+  }
 
   menuClicked() {
     this.menuController.close();

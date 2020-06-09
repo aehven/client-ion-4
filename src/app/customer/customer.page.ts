@@ -7,6 +7,7 @@ import { pluralize, titleize } from 'inflected';
 
 import { DataService } from '../services/data.service';
 import { SessionService } from '../services/session.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-customer',
@@ -16,6 +17,9 @@ import { SessionService } from '../services/session.service';
 export class CustomerPage implements OnInit {
   public klass = "customer";
   public Klass = titleize(this.klass);
+
+  public dklass = this.klass;
+  public dKlass = titleize(this.klass);
 
   public gotIt: boolean = false;
   public form : FormGroup;
@@ -29,6 +33,7 @@ export class CustomerPage implements OnInit {
               public router: Router,
               public location: Location,
               public sessionService: SessionService,
+              public storage: StorageService,
               fb: FormBuilder) {
                 this.form = fb.group({
                   'parent_id' : [this.sessionService.currentUser.customer_id],
@@ -39,6 +44,9 @@ export class CustomerPage implements OnInit {
               }
 
   ngOnInit() {
+    this.dklass = this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"];
+    this.dKlass = titleize(this.dklass);
+
     this.route.params.subscribe(params => {
       this.id = params['id'];
 
