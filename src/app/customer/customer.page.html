@@ -3,63 +3,72 @@
 <app-header title="{{Klass}}"></app-header>
 
 <ion-content>
-
-    <form [formGroup]="form" (ngSubmit)="submitForm(form)">
-      <ion-grid>
-        <ion-row color="primary" class="ion-justify-content-center">
-
-          <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
-            <div class="ion-padding">
-              <ion-item *ngIf="customers?.length > 0 && sessionService?.currentUser?.can('create', 'Customer')">
-                <ion-select placeholder="Parent customer" formControlName="parent_id">
-                  <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
-                  <ion-select-option *ngFor="let customer of customers" [value]="customer.id">{{customer.name}}</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-input name="name" type="text" placeholder="Customer name" autocomplete="off" formControlName="name"></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-input name="address1" type="text" placeholder="Address 1" autocomplete="off" formControlName="address1"></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-input name="address2" type="text" placeholder="Address 2" autocomplete="off" formControlName="address2"></ion-input>
-              </ion-item>
-            </div>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-center">
-            <ion-button
-              *ngIf="!isReadOnly"
-              type="submit"
-              [disabled]="!form.valid"
-            >
-              Submit
-            </ion-button>
-
-            <ion-button
-              *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Customer'))"
-              (click)="enableForm()"
-            >
-              Edit
-            </ion-button>
-
-            <ion-button color="secondary"
-              *ngIf="!isReadOnly"
-              (click)="cancel()"
-            >
-              Cancel
-            </ion-button>
-
-            <ion-button color="danger"
-              *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Customer')"
-              (click)="delete($event)"
-            >
-              Delete
-            </ion-button>
-        </ion-row>
-      </ion-grid>
-    </form>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <form [formGroup]="form" (ngSubmit)="submitForm(form)">
+          <ion-grid>
+            <ion-row color="primary" class="ion-justify-content-center">
+    
+              <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
+                <div class="ion-padding">
+                  <ion-item *ngIf="customers?.length > 0 && sessionService?.currentUser?.can('create', 'Customer')">
+                    <ion-select placeholder="Parent customer" formControlName="parent_id">
+                      <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
+                      <ion-select-option *ngFor="let customer of customers" [value]="customer.id">{{customer.name}}</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <ion-item>
+                    <ion-input name="name" type="text" placeholder="Customer name" autocomplete="off" formControlName="name"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-input name="address1" type="text" placeholder="Address 1" autocomplete="off" formControlName="address1"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-input name="address2" type="text" placeholder="Address 2" autocomplete="off" formControlName="address2"></ion-input>
+                  </ion-item>
+                </div>
+              </ion-col>
+            </ion-row>
+    
+            <ion-row class="ion-justify-content-center">
+                <ion-button
+                  *ngIf="!isReadOnly"
+                  type="submit"
+                  [disabled]="!form.valid"
+                >
+                  Submit
+                </ion-button>
+    
+                <ion-button
+                  *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Customer'))"
+                  (click)="enableForm()"
+                >
+                  Edit
+                </ion-button>
+    
+                <ion-button color="secondary"
+                  *ngIf="!isReadOnly"
+                  (click)="cancel()"
+                >
+                  Cancel
+                </ion-button>
+    
+                <ion-button color="danger"
+                  *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Customer')"
+                  (click)="delete($event)"
+                >
+                  Delete
+                </ion-button>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-col>
+    </ion-row>
+    <ion-row class="users-list">
+      <ion-col>
+        <app-users [customerId]="id"></app-users>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,6 +1,6 @@
 import { environment } from '../../../environments/environment';
 
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 
@@ -17,6 +17,9 @@ import { SessionService } from '../../services/session.service';
 })
 export class UsersComponent implements OnInit, AfterViewInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
+  @Input()
+  customerId: string;
 
   public klass = "user";
   public Klass = titleize(this.klass);
@@ -63,7 +66,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
+    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, customer_id: this.customerId})
     .subscribe( resp => {
       for(let item of resp['data']) {
         this.data.push(item);
