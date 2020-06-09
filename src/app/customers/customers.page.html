@@ -14,8 +14,8 @@
       <ion-col size="12" size-sm>
          <ion-searchbar
           placeholder="Search by name"
-          [(ngModel)]="searchTerm"
-          (ionChange)="search()"
+          [value]="searchTerm"
+          (ionChange)="search($event)"
           dbounce="500"
           ></ion-searchbar>
       </ion-col>

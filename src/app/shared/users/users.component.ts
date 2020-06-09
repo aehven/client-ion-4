@@ -1,4 +1,4 @@
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,16 +6,16 @@ import { IonInfiniteScroll } from '@ionic/angular';
 
 import { pluralize, titleize } from 'inflected';
 
-import { DataService } from '../services/data.service';
-import { StorageService } from '../services/storage.service';
-import { SessionService } from '../services/session.service';
+import { DataService } from '../../services/data.service';
+import { StorageService } from '../../services/storage.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './users.page.html',
-  styleUrls: ['./users.page.scss'],
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
 })
-export class UsersPage implements OnInit, AfterViewInit {
+export class UsersComponent implements OnInit, AfterViewInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public klass = "user";
@@ -84,7 +84,8 @@ export class UsersPage implements OnInit, AfterViewInit {
     this.router.navigate([`/${this.klass}/new`]);
   }
 
-  search(): void {
+  search(event): void {
+    this.searchTerm = event.target.value;
     this.page = 0;
     this.data = [];
     this.loadData();

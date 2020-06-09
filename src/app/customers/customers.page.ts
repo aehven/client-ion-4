@@ -86,7 +86,8 @@ export class CustomersPage implements AfterViewInit, OnInit {
       this.router.navigate([`/${this.klass}/new`]);
     }
 
-    search(): void {
+    search(event): void {
+      this.searchTerm = event.target.value;
       this.page = 0;
       this.data = [];
       this.loadData();

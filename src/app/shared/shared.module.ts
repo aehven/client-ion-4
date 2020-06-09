@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import {HeaderComponent} from './header/header.component';
 import {MenuComponent} from './menu/menu.component';
+import {UsersComponent} from './users/users.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import {MenuComponent} from './menu/menu.component';
     IonicModule,
     RouterModule
   ],
-  declarations: [HeaderComponent, MenuComponent],
-  exports: [CommonModule, HeaderComponent, MenuComponent]
+  declarations: [HeaderComponent, MenuComponent, UsersComponent],
+  exports: [CommonModule, HeaderComponent, MenuComponent, UsersComponent]
 })
 export class SharedModule { }
