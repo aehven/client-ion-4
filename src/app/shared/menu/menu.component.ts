@@ -1,5 +1,5 @@
 import { environment } from '../../../environments/environment';
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 
 import { pluralize, titleize } from 'inflected';
@@ -12,7 +12,7 @@ import { StorageService } from '../../services/storage.service';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements AfterViewInit {
   public usersBelongToCustomers = environment.usersBelongToCustomers;
   public aCustomerIsCalled = "customer";
 
@@ -20,11 +20,13 @@ export class MenuComponent implements OnInit {
     public storage: StorageService,
     public sessionService: SessionService) { }
 
-  ngOnInit() {
-    try {
-      this.aCustomerIsCalled = pluralize(titleize(this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"]));
-    }
-    catch( _ ) {}
+  ngAfterViewInit() {
+    setTimeout(() => {
+      try {
+        this.aCustomerIsCalled = pluralize(titleize(this.storage?.serverEnv?.["BTSTC_CUSTOMER_IS_CALLED"]));
+      }
+      finally {}
+    }, 1000);
   }
 
   menuClicked() {
