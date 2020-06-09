@@ -3,7 +3,6 @@ import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/shareReplay'; //this can go away when updating to rxjs 6.4?; requires npm install rxjs-compat
 
 import { Router } from '@angular/router';
 
@@ -27,11 +26,11 @@ export class DataService {
   public current = {};
 
   post(path: string, body: Object): Observable<any> {
-    return this.http.post(`${environment.apiPath}/${path}`, body).shareReplay();
+    return this.http.post(`${environment.apiPath}/${path}`, body);
   }
 
   get(path: string, params: any = {}): Observable<any> {
-    return this.http.get(`${environment.apiPath}/${path}`, {params: params}).shareReplay();
+    return this.http.get(`${environment.apiPath}/${path}`, {params: params});
   }
 
   resourceUrl(resource: string): string {
@@ -39,13 +38,13 @@ export class DataService {
   }
 
   index(resource: string, params: any = {}): Observable<any> {
-    let res = this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}`, {params: params}).shareReplay();
+    let res = this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}`, {params: params});
 
     return res;
   }
 
   show(resource: string, id: any, params: any = {}): Observable<any> {
-    let res = this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params}).shareReplay();
+    let res = this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params});
 
     this.setCurrent(res, resource);
 
@@ -62,7 +61,7 @@ export class DataService {
   }
 
   update(resource: string, id: any, values: Object = {}): Observable<any> {
-    let res =  this.http.put(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values}).shareReplay();
+    let res =  this.http.put(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values});
 
     this.setCurrent(res, resource);
 
@@ -70,13 +69,13 @@ export class DataService {
   }
 
   create(resource: string, values: Object = {}): Observable<any> {
-    let res =  this.http.post(`${environment.apiPath}/${this.resourceUrl(resource)}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values}).shareReplay();
+    let res =  this.http.post(`${environment.apiPath}/${this.resourceUrl(resource)}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values});
 
     return res;
   }
 
   delete(resource: string, id: any, params: any = {}): Observable<any> {
-    let res =  this.http.delete(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params}).shareReplay();
+    let res =  this.http.delete(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params});
 
     return res;
   }

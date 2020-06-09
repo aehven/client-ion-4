@@ -15,7 +15,7 @@ import { S3Service } from '../services/s3.service';
   styleUrls: ['./trash.page.scss'],
 })
 export class TrashPage implements OnInit, AfterViewInit {
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
 
   public klass = "movie";
   public Klass = titleize(this.klass);

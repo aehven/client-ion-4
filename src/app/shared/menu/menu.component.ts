@@ -21,7 +21,10 @@ export class MenuComponent implements OnInit {
     public sessionService: SessionService) { }
 
   ngOnInit() {
-    this.aCustomerIsCalled = pluralize(titleize(this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"]));
+    try {
+      this.aCustomerIsCalled = pluralize(titleize(this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"]));
+    }
+    catch( _ ) {}
   }
 
   menuClicked() {

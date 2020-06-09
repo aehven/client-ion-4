@@ -16,7 +16,7 @@ import { SessionService } from '../services/session.service';
   styleUrls: ['./audits.page.scss'],
 })
 export class AuditsPage implements OnInit, AfterViewInit {
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
 
   public klass = "audit";
   public Klass = titleize(this.klass);

@@ -16,7 +16,7 @@ import { SessionService } from '../../services/session.service';
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit, AfterViewInit {
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
 
   @Input()
   customerId: string;
