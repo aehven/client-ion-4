@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
 import {
-  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse
+  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -34,27 +34,17 @@ export class AuthInterceptor implements HttpInterceptor {
       console.warn("Couldn't set headers in auth interceptor");
     }
 
-    // return next.handle(req).pipe(tap(event => {
-    //     if (event instanceof HttpResponse) {
-    //     }
-    //   })).pipe(
-    //   .catch(err => {
-    //     if(err.status == 401 || err.status == 403) {
-    //       this.router.navigate(['/login'], {queryParams: {anonymous: environment.allowAnonymousUsers}});
-    //     }
-
-    //     return Observable.throw(err);
-    //   }));
-    return next.handle(req).pipe(tap(
+    return next.handle(req).pipe( tap(() => {},
       (err: any) => {
-        if (err instanceof HttpResponse) {
-          console.log(err);
-          console.log('req url :: ' + req.url);
-          if(err.status == 401 || err.status == 403) {
-            this.router.navigate(['/login'], {queryParams: {anonymous: environment.allowAnonymousUsers}});
-          }
+      if (err instanceof HttpErrorResponse) {
+        if (err.status !== 401) {
+         return;
         }
+        setTimeout(() => {
+          this.router.navigate(['/login'], {queryParams: {anonymous: environment.allowAnonymousUsers}});
+        }, 100);
       }
-    ));
+    }));
+
   }
 }

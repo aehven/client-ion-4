@@ -19,7 +19,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
 
   @Input()
-  customerId: string;
+  customerId: number = null;
 
   public klass = "user";
   public Klass = titleize(this.klass);
@@ -66,7 +66,18 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, customer_id: this.customerId})
+    
+    let params = {
+      per_page: this.pageSize, 
+      page: this.page, 
+      search: this.searchTerm,
+    };
+
+    if(this.customerId && !isNaN(this.customerId)) {
+      params['customer_id'] = this.customerId;
+    }
+
+    this.dataService.index(this.klass, params)
     .subscribe( resp => {
       for(let item of resp['data']) {
         this.data.push(item);
