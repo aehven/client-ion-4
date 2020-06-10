@@ -62,50 +62,40 @@ export class CustomerPage implements OnInit {
     });
   }
 
-  get():void {
+  async get() {
     this.gotIt = false;
-    this.dataService.show(`${this.klass}`, + this.id)
-    .subscribe( resp => {
-      this.form.patchValue(resp['data']);
-      if(this.form.controls['parent_id'].value != null || this.sessionService.currentUser.role == 'admin') {
-        this.getCustomers();
-      }
-      else {
-        this.gotIt = true;
-      }
-    });
-  }
-
-  getCustomers(): void {
-    this.dataService.index("customers", {names_and_ids_only: true}).subscribe(resp => {
-      this.customers = resp['data'].filter(c => parseInt(c[0]) != parseInt(this.id));
+    const resp = await this.dataService.show(`${this.klass}`, + this.id);
+    this.form.patchValue(resp['data']);
+    if(this.form.controls['parent_id'].value != null || this.sessionService.currentUser.role == 'admin') {
+      this.getCustomers();
+    }
+    else {
       this.gotIt = true;
-    })
+    }
   }
 
-  submitForm(form): void {
-    let response = null;
-
-    response = this.dataService.send(this.klass, this.id, form.value);
-
-    response.subscribe(
-      res =>  {
-        this.id = res['id'];
-        this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-      },
-      error => {
-        this.errorMessage = error.error.message;
-      }
-    );
+  async getCustomers() {
+    const resp = await this.dataService.index("customers", {names_and_ids_only: true});
+    this.customers = resp['data'].filter(c => parseInt(c[0]) != parseInt(this.id));
+    this.gotIt = true;
   }
 
-  delete(event): void {
+  async submitForm(form) {
+    try {
+      this.errorMessage = null;
+      const response = await this.dataService.send(this.klass, this.id, form.value);
+      this.id = response['data']['id'];
+      this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
+    }
+    catch(error) {
+      this.errorMessage = error.statusText;
+    }
+  }
+
+  async delete(event) {
     if(confirm("Are you sure?")) {
-      this.dataService.delete(this.klass, this.id)
-      .subscribe(
-        _ => {
-          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-        });
+      await this.dataService.delete(this.klass, this.id)
+      this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
     }
     else {
       event.preventDefault(); //stay where we are
@@ -126,6 +116,7 @@ export class CustomerPage implements OnInit {
   }
 
   cancel(): void {
+    this.errorMessage = null;
     this.gotIt = false;
     if(this.id == "new") {
       this.location.back();

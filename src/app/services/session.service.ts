@@ -51,17 +51,12 @@ export class SessionService {
     return this.user;
   }
 
-  updateCurrentUser(data: any): Observable<any> {
-    let resp = this.dataService.send("User", this.user.id, data);
-
-    resp.subscribe(res => {
-      this.user = new User(res);
-      console.log("logged in", this.user);
-      this.storage.setObj("currentUser", this.user);
-    });
-
-    return resp;
-  }
+  // async updateCurrentUser(data: any) {
+  //   const resp = await this.dataService.send("User", this.user.id, data);
+  //   this.user = new User(resp['data']);
+  //   console.log("logged in", this.user);
+  //   this.storage.setObj("currentUser", this.user);
+  // }
 
   can(action: string, subject: string) {
     if(this.currentUser) {
@@ -89,41 +84,33 @@ export class SessionService {
     return true;
   }
 
-  signIn(params: any): Observable<any> {
-    let resp = this.dataService.post("/user_token ", {auth: params});
+  async signIn(params: any) {
+    const resp = await this.dataService.post("/user_token ", {auth: params});
 
-    resp.subscribe(data => {
-      this.user = new User({email: params.email, jwt: data.jwt});
-      console.log("logged in", this.user);
-      this.storage.setObj("currentUser", this.user);
+    this.user = new User({email: params.email, jwt: resp['jwt']});
+    console.log("logged in", this.user);
+    this.storage.setObj("currentUser", this.user);
 
-      this.handleSignIn();
-    })
+    this.handleSignIn();
 
     return resp;
   }
 
-  handleSignIn(): void {
-    let resp = this.dataService.get("/get_profile");
-    resp.subscribe(data => {
-      this.storage.serverEnv = data['server'];
-      this.user.mergeValues(data['profile']);
-      this.storage.setObj("currentUser", this.user);
-    })
+  async handleSignIn() {
+    const resp = await this.dataService.get("/get_profile");
+    this.storage.serverEnv = resp['server'];
+    this.user.mergeValues(resp['profile']);
+    this.storage.setObj("currentUser", this.user);
+
     this.webSocketsService.initialize(this.user);
     this.getNotifications();
 
     this.status.emit("LoggedIn");
   }
 
-  anonymousSignIn(): void {
-    this.signIn({
-        login:    "demo@null.com",
-        password: "password"
-    }).subscribe(
-      res => {
-        this.router.navigate([environment.homePath]);
-      })
+  async anonymousSignIn() {
+    await this.signIn({login:    "demo@null.com", password: "password"});
+    this.router.navigate([environment.homePath]);
   }
 
   signOut() {

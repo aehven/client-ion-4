@@ -25,73 +25,61 @@ export class DataService {
 
   public current = {};
 
-  post(path: string, body: Object): Observable<any> {
-    return this.http.post(`${environment.apiPath}/${path}`, body);
+  async post(path: string, body: Object) {
+    return await this.http.post(`${environment.apiPath}/${path}`, body).toPromise();
   }
 
-  get(path: string, params: any = {}): Observable<any> {
-    return this.http.get(`${environment.apiPath}/${path}`, {params: params});
+  async get(path: string, params: any = {}) {
+    return this.http.get(`${environment.apiPath}/${path}`, {params: params}).toPromise();
   }
 
   resourceUrl(resource: string): string {
     return pluralize(resource.toLowerCase().replace("-", "_"));
   }
 
-  index(resource: string, params: any = {}): Observable<any> {
-    let res = this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}`, {params: params});
-
-    return res;
+  async index(resource: string, params: any = {}) {
+    return await this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}`, {params: params}).toPromise();
   }
 
-  show(resource: string, id: any, params: any = {}): Observable<any> {
-    let res = this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params});
+  async show(resource: string, id: any, params: any = {}) {
+    const res = await this.http.get(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params}).toPromise();
 
     this.setCurrent(res, resource);
 
     return res;
   }
 
-  send(resource: string, id: any, values: Object = {}): Observable<any> {
+  async send(resource: string, id: any, values: Object = {}) {
     if(isNaN(id) || id < 1) {
-      return this.create(resource, values)
+      return await this.create(resource, values);
     }
     else {
-      return this.update(resource, id, values)
+      return await this.update(resource, id, values);
     }
   }
 
-  update(resource: string, id: any, values: Object = {}): Observable<any> {
-    let res =  this.http.put(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values});
+  async update(resource: string, id: any, values: Object = {}) {
+    const res = await this.http.put(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values}).toPromise();
 
     this.setCurrent(res, resource);
 
     return res;
   }
 
-  create(resource: string, values: Object = {}): Observable<any> {
-    let res =  this.http.post(`${environment.apiPath}/${this.resourceUrl(resource)}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values});
+  async create(resource: string, values: Object = {}) {
+    const res = await this.http.post(`${environment.apiPath}/${this.resourceUrl(resource)}`, {[singularize(resource.toLowerCase().replace("-","_"))]: values}).toPromise();
 
     return res;
   }
 
-  delete(resource: string, id: any, params: any = {}): Observable<any> {
-    let res =  this.http.delete(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params});
+  async delete(resource: string, id: any, params: any = {}) {
+    const res = await this.http.delete(`${environment.apiPath}/${this.resourceUrl(resource)}/${id}`, {params: params}).toPromise();
 
     return res;
   }
 
   setCurrent(res:any, resource:any): void {
-    res.subscribe(
-      res => {
-        this.current[resource] = res;
-        this.storage.setObj("current", this.current);
-      },
-
-      error => {
-        console.log("setCurrent error: ", error);
-        this.current[resource] = null;
-        this.storage.setObj("current", this.current);
-      }
-    );
+    this.current[resource] = res['data'];
+    this.storage.setObj("current", this.current);
   }
 }

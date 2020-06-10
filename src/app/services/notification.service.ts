@@ -25,10 +25,7 @@ export class NotificationService {
           text: notification['action'] || "OK",
           handler: () => {
             if(notification['id']) {
-              let resp = this.dataService.post(`users/${this.storage.getObj("currentUser")['id']}/acknowledge_notification`, {notification_id: notification['id']});
-              resp.subscribe(data => {
-                console.log("acknowledged", data);
-              })
+              this.dataService.post(`users/${this.storage.getObj("currentUser")['id']}/acknowledge_notification`, {notification_id: notification['id']});
             }
           }
         }

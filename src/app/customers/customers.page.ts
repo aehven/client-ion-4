@@ -57,7 +57,7 @@ export class CustomersPage implements AfterViewInit, OnInit {
       this.loadData();
     }
 
-    public loadData(event:any=null) {
+    public async loadData(event:any=null) {
       if(this.data.length >= this.collectionSize) {
         if(event) {
           event.target.complete();
@@ -67,25 +67,24 @@ export class CustomersPage implements AfterViewInit, OnInit {
 
       this.page += 1;
       this.gotIt = false;
-      this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
-      .subscribe( resp => {
-        for(let item of resp['data']) {
-          item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
-          this.data.push(item);
-        }
-        this.collectionSize = resp['meta']['total'];
-        this.getCustomers(event);
-      });
+
+      const resp = await this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
+
+      for(let item of resp['data']) {
+        item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
+        this.data.push(item);
+      }
+      this.collectionSize = resp['meta']['total'];
+      this.getCustomers(event);
     }
 
-    getCustomers(event:any=null): void {
-      this.dataService.index(this.klasses).subscribe(resp => {
+    async getCustomers(event:any=null) {
+      const resp = await this.dataService.index(this.klasses);
         this.customers = resp['data'];
         this.gotIt = true;
         if(event) {
           event.target.complete();
         }
-      })
     }
 
     selectItem(id: number): void {

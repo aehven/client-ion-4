@@ -43,31 +43,29 @@ export class LoginPage implements OnInit {
     }
   }
 
-  submitForm(form: FormGroup): void {
-    this.sessionService.signIn({
+  async submitForm(form: FormGroup) {
+    try {
+      const resp = await this.sessionService.signIn({
         email:    form.value.email.trim(),
         password: form.value.password.trim()
-    }).subscribe(
-      _ =>      {
-        // this.storage.serverEnv = res.body.data.server;
-        this.sessionService.goHome();
-      },
-      error => {
-        if(error.status == 401) {
-          this.invalidCreds = true;
-          this.form.controls['email'].setErrors({'incorrect': true});
-          this.form.controls['password'].setErrors({'incorrect': true});
-          this.unknownError = false;
-        }
-        else {
-          this.invalidCreds = false;
-          this.form.controls['email'].setErrors(null);
-          this.form.controls['password'].setErrors(null);
-          this.unknownError = true;
-        }
-        console.log(error)
+      });
+      this.sessionService.goHome();
+    }
+    catch(error) {
+      if(error.status == 401 || error.status == 404) {
+        this.invalidCreds = true;
+        this.form.controls['email'].setErrors({'incorrect': true});
+        this.form.controls['password'].setErrors({'incorrect': true});
+        this.unknownError = false;
       }
-    );
+      else {
+        this.invalidCreds = false;
+        this.form.controls['email'].setErrors(null);
+        this.form.controls['password'].setErrors(null);
+        this.unknownError = true;
+      }
+      console.log(error)
+    }
   }
 
   eraseErrors(): void {

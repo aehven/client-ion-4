@@ -80,55 +80,39 @@ export class UserPage implements OnInit {
     });
   }
 
-  get():void {
-    this.dataService.show(`${this.klass}`, + this.id)
-    .subscribe( resp => {
-      this.role = resp['data']['role'];
-      this.form.patchValue(resp['data']);
-      this.getCustomers();
-    });
+  async get() {
+    const resp = await this.dataService.show(`${this.klass}`, + this.id);
+    this.role = resp['data']['role'];
+    this.form.patchValue(resp['data']);
+    this.getCustomers();
   }
 
-  getCustomers(): void {
+  async getCustomers() {
     if(this.usersBelongToCustomers && this.sessionService.currentUser.can('index', 'Customer')) {
-      this.dataService.index("customers").subscribe(data => {
-        this.customers = data.customers;
-        this.gotIt = true;
-      })
+      const resp = await this.dataService.index("customers");
+      this.customers = resp['data'];
+      this.gotIt = true;
     }
     else {
       this.gotIt = true;
     }
   }
 
-  submitForm(form: any): void {
-    let response = null;
-
-    response = this.dataService.send(this.klass, this.id, form.value);
-
-    response.subscribe(
-      res =>  {
-        this.id = res['id'];
-        if(this.ownProfile) {
-          this.location.back();
-        }
-        else {
-          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-        }
-      },
-      error => {
-        this.errorMessage = error.error.message;
-      }
-    );
+  async submitForm(form: any) {
+    try {
+      const response = await this.dataService.send(this.klass, this.id, form.value);
+      this.id = response['data']['id'];
+      this.location.back();
+    }
+    catch(error) {
+      this.errorMessage = error.statusText;
+    }
   }
 
-  delete(event: any): void {
+  async delete(event: any) {
     if(confirm("Are you sure?")) {
-      this.dataService.delete(this.klass, this.id)
-      .subscribe(
-        _ => {
-          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-        });
+      await this.dataService.delete(this.klass, this.id);
+      this.location.back();
     }
     else {
       event.preventDefault(); //stay here
@@ -159,15 +143,12 @@ export class UserPage implements OnInit {
     }
   }
 
-  downloadData(): void {
-    this.dataService.get(`/users/${this.id}/download_data`).subscribe(
-       res => {
-         console.log(res);
-         let blob = new Blob([JSON.stringify(res, null, 4)], { type: 'text/plain' });
-         saveAs(blob, "MyData.txt");
-       }
-     )
-   }
+  async downloadData() {
+    const res = await this.dataService.get(`/users/${this.id}/download_data`);
+    console.log(res);
+    let blob = new Blob([JSON.stringify(res, null, 4)], { type: 'text/plain' });
+    saveAs(blob, "MyData.txt");
+  }
 
    customerChanged(event: any):void {
      this.userCustomer = event.value;

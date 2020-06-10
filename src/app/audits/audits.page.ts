@@ -61,7 +61,7 @@ export class AuditsPage implements OnInit, AfterViewInit {
     this.loadData();
   }
 
-  public loadData(event:any=null) {
+  public async loadData(event:any=null) {
     if(this.data.length >= this.collectionSize) {
       if(event) {
         event.target.complete();
@@ -71,17 +71,15 @@ export class AuditsPage implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, include: JSON.stringify(this.includeAudits)})
-    .subscribe( resp => {
-      for(let item of resp['data']) {
-        this.data.push(item);
-      }
-      this.collectionSize = resp['meta']['total'];
-      this.gotIt = true;
-      if(event) {
-        event.target.complete();
-      }
-    });
+    const resp = await this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, include: JSON.stringify(this.includeAudits)})
+    for(let item of resp['data']) {
+      this.data.push(item);
+    }
+    this.collectionSize = resp['meta']['total'];
+    this.gotIt = true;
+    if(event) {
+      event.target.complete();
+    }
   }
 
   selectItem(id: number): void {

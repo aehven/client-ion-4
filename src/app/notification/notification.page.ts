@@ -59,38 +59,29 @@ export class NotificationPage implements OnInit {
     });
   }
 
-  get():void {
+  async get() {
     this.gotIt = false;
-    this.dataService.show(`${this.klass}`, + this.id)
-    .subscribe( data => {
-      this.form.patchValue(data);
-      this.gotIt = true;
-    });
+    const resp = await this.dataService.show(`${this.klass}`, + this.id);
+    this.form.patchValue(resp['data']);
+    this.gotIt = true;
   }
 
-  submitForm(form): void {
-    let response = null;
-
-    response = this.dataService.send(this.klass, this.id, form.value);
-
-    response.subscribe(
-      res =>  {
-        this.id = res['id'];
-        this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-      },
-      error => {
-        this.errorMessage = error.error.message;
-      }
-    );
+  async submitForm(form) {
+    try {
+      this.errorMessage = null;
+      const response = await this.dataService.send(this.klass, this.id, form.value);
+      this.id = response['data']['id'];
+      this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
+    }
+    catch(error) {
+      this.errorMessage = error.statusText;
+    }
   }
 
-  delete(event): void {
+  async delete(event) {
     if(confirm("Are you sure?")) {
-      this.dataService.delete(this.klass, this.id)
-      .subscribe(
-        _ => {
-          this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-        });
+      await this.dataService.delete(this.klass, this.id);
+      this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
     }
     else {
       event.preventDefault(); //stay where we are

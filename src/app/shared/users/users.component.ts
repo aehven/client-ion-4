@@ -56,7 +56,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
     this.loadData();
   }
 
-  public loadData(event:any=null) {
+  public async loadData(event:any=null) {
     if(this.data.length >= this.collectionSize) {
       if(event) {
         event.target.complete();
@@ -77,17 +77,15 @@ export class UsersComponent implements OnInit, AfterViewInit {
       params['customer_id'] = this.customerId;
     }
 
-    this.dataService.index(this.klass, params)
-    .subscribe( resp => {
-      for(let item of resp['data']) {
-        this.data.push(item);
-      }
-      this.collectionSize = resp['meta']['total'];
-      this.gotIt = true;
-      if(event) {
-        event.target.complete();
-      }
-    });
+    const resp = await this.dataService.index(this.klass, params);
+    for(let item of resp['data']) {
+      this.data.push(item);
+    }
+    this.collectionSize = resp['meta']['total'];
+    this.gotIt = true;
+    if(event) {
+      event.target.complete();
+    }
   }
 
   selectItem(id: number): void {

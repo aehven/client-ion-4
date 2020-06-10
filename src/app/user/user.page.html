@@ -82,6 +82,9 @@
               Delete
             </ion-button>
         </ion-row>
+        <ion-row *ngIf="errorMessage">
+          <ion-col class="error center">{{errorMessage}}</ion-col>
+        </ion-row>
       </ion-grid>
     </form>
 
