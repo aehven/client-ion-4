@@ -31,6 +31,7 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
   public collectionSize = 1;
   public page = 0;
   public pageSize = 10;
+  public kind = "all";
 
   constructor(public sessionService: SessionService,
     public dataService: DataService,
@@ -50,6 +51,10 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
           this.page = 0;
           this.loadData();
         }
+
+        if(params["kind"]) {
+          this.kind = params["kind"]
+        }
       })
     }
 
@@ -68,7 +73,7 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
       this.page += 1;
       this.gotIt = false;
 
-      const resp = await this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm})
+      const resp = await this.dataService.index(this.klass, {kind: this.kind, per_page: this.pageSize, page: this.page, search: this.searchTerm})
 
       for(let item of resp['data']) {
         item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;

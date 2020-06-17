@@ -9,10 +9,17 @@
     <ion-label>Users</ion-label>
   </ion-item>
 
-  <ion-item *ngIf="usersBelongToOrganizations && sessionService?.currentUser?.can('index', 'Organization')" routerLink="/organizations">
-    <ion-icon name="business" slot="start"></ion-icon>
-    <ion-label>{{aOrganizationIsCalled}}</ion-label>
-  </ion-item>
+  <span *ngIf="usersBelongToOrganizations && sessionService?.currentUser?.can('index', 'Organization')">
+    <ion-item  routerLink="/organizations">
+      <ion-icon name="business" slot="start"></ion-icon>
+      <ion-label>Organizations (All)</ion-label>
+    </ion-item>
+
+    <ion-item *ngFor="let kind of storage.serverEnv['BTSTC_ORGANIZATION_KINDS']"  routerLink="/organizations" [queryParams]="{kind: kind}">
+      <ion-icon name="business" slot="start"></ion-icon>
+      <ion-label>&nbsp;&nbsp;&nbsp;{{kind|titlecase}}</ion-label>
+    </ion-item>
+  </span>
 
   <ion-item routerLink="/notifications">
     <ion-icon name="chatbubbles" slot="start"></ion-icon>
