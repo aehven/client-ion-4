@@ -1,6 +1,6 @@
 <div *ngIf="gotIt" class="got-organization-list">GOT IT</div>
 
-<app-header title="{{dKlasses||Klasses}}"></app-header>
+<app-header title="{{Klasses}}"></app-header>
 
 <ion-content>
   <ion-grid>
@@ -8,7 +8,7 @@
       <ion-col size="12" size-sm>
         <ion-button color="primary" (click)="newItem();"
           *ngIf="sessionService.currentUser?.can('create', 'User')">
-          New {{dKlass||Klass}}
+          New {{Klass}}
         </ion-button>
       </ion-col>
       <ion-col size="12" size-sm>
@@ -32,19 +32,19 @@
 
   <div *ngIf="data.length < collectionSize; else endOfData">
     <div class="grey ion-padding">
-      Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{dklasses||klasses}}....
+      Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
     </div>
   </div>
   <ng-template #endOfData>
     <div class="grey ion-padding">
-      No more {{dklasses||klasses}}.
+      No more {{klasses}}.
     </div>
   </ng-template>
 
   <ion-infinite-scroll threshold="80%" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
-      loadingText="Loading more {{dklasses||klasses}}...">
+      loadingText="Loading more {{klasses}}...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 <ion-content>

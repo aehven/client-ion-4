@@ -18,9 +18,6 @@ export class OrganizationPage implements OnInit {
   public klass = "organization";
   public Klass = titleize(this.klass);
 
-  public dklass = this.klass;
-  public dKlass = titleize(this.klass);
-
   public gotIt: boolean = false;
   public form : FormGroup;
   public isReadOnly: boolean = true;
@@ -44,9 +41,6 @@ export class OrganizationPage implements OnInit {
               }
 
   ngOnInit() {
-    this.dklass = this.storage.serverEnv["BTSTC_ORGANIZATION_IS_CALLED"];
-    this.dKlass = titleize(this.dklass);
-
     this.route.params.subscribe(params => {
       this.id = params['id'];
 
