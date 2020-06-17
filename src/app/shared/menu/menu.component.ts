@@ -13,8 +13,8 @@ import { StorageService } from '../../services/storage.service';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements AfterViewInit {
-  public usersBelongToCustomers = environment.usersBelongToCustomers;
-  public aCustomerIsCalled = "customer";
+  public usersBelongToOrganizations = environment.usersBelongToOrganizations;
+  public aOrganizationIsCalled = "organization";
 
   constructor(private menuController: MenuController, 
     public storage: StorageService,
@@ -23,7 +23,7 @@ export class MenuComponent implements AfterViewInit {
   ngAfterViewInit() {
     setTimeout(() => {
       try {
-        this.aCustomerIsCalled = pluralize(titleize(this.storage?.serverEnv?.["BTSTC_CUSTOMER_IS_CALLED"]));
+        this.aOrganizationIsCalled = pluralize(titleize(this.storage?.serverEnv?.["BTSTC_ORGANIZATION_IS_CALLED"]));
       }
       finally {}
     }, 1000);

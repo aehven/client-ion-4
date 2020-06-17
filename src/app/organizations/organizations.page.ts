@@ -8,12 +8,12 @@ import { StorageService } from '../services/storage.service';
 import { SessionService } from '../services/session.service';
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.page.html',
-  styleUrls: ['./customers.page.scss'],
+  selector: 'app-organizations',
+  templateUrl: './organizations.page.html',
+  styleUrls: ['./organizations.page.scss'],
 })
-export class CustomersPage implements AfterViewInit, OnInit {
-  public klass = "customer";
+export class OrganizationsPage implements AfterViewInit, OnInit {
+  public klass = "organization";
   public Klass = titleize(this.klass);
   public klasses = pluralize(this.klass);
   public Klasses = pluralize(this.Klass);
@@ -24,7 +24,7 @@ export class CustomersPage implements AfterViewInit, OnInit {
   public dKlasses = pluralize(this.dKlass);
 
   public data: any[] = [];
-  public customers;
+  public organizations;
 
   public gotIt: boolean = false;
   public searchTerm = "";
@@ -39,7 +39,7 @@ export class CustomersPage implements AfterViewInit, OnInit {
     public router: Router) {}
 
     ngOnInit() {
-      this.dklass = this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"];
+      this.dklass = this.storage.serverEnv["BTSTC_ORGANIZATION_IS_CALLED"];
       this.dKlass = titleize(this.dklass);
       this.dklasses = pluralize(this.dklass);
       this.dKlasses = pluralize(this.dKlass);
@@ -75,12 +75,12 @@ export class CustomersPage implements AfterViewInit, OnInit {
         this.data.push(item);
       }
       this.collectionSize = resp['meta']['total'];
-      this.getCustomers(event);
+      this.getOrganizations(event);
     }
 
-    async getCustomers(event:any=null) {
+    async getOrganizations(event:any=null) {
       const resp = await this.dataService.index(this.klasses);
-        this.customers = resp['data'];
+        this.organizations = resp['data'];
         this.gotIt = true;
         if(event) {
           event.target.complete();

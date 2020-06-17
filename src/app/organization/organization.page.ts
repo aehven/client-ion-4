@@ -10,12 +10,12 @@ import { SessionService } from '../services/session.service';
 import { StorageService } from '../services/storage.service';
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.page.html',
-  styleUrls: ['./customer.page.scss'],
+  selector: 'app-organization',
+  templateUrl: './organization.page.html',
+  styleUrls: ['./organization.page.scss'],
 })
-export class CustomerPage implements OnInit {
-  public klass = "customer";
+export class OrganizationPage implements OnInit {
+  public klass = "organization";
   public Klass = titleize(this.klass);
 
   public dklass = this.klass;
@@ -26,7 +26,7 @@ export class CustomerPage implements OnInit {
   public isReadOnly: boolean = true;
   public id;
   public errorMessage;
-  public customers;
+  public organizations;
 
   constructor(public dataService: DataService,
               public route: ActivatedRoute,
@@ -36,7 +36,7 @@ export class CustomerPage implements OnInit {
               public storage: StorageService,
               fb: FormBuilder) {
                 this.form = fb.group({
-                  'parent_id' : [this.sessionService.currentUser.customer_id],
+                  'parent_id' : [this.sessionService.currentUser.organization_id],
                   'name' : [null, Validators.required],
                   'address1' : [null, Validators.required],
                   'address2' :  [null]
@@ -44,7 +44,7 @@ export class CustomerPage implements OnInit {
               }
 
   ngOnInit() {
-    this.dklass = this.storage.serverEnv["BTSTC_CUSTOMER_IS_CALLED"];
+    this.dklass = this.storage.serverEnv["BTSTC_ORGANIZATION_IS_CALLED"];
     this.dKlass = titleize(this.dklass);
 
     this.route.params.subscribe(params => {
@@ -53,7 +53,7 @@ export class CustomerPage implements OnInit {
       if(this.id == "new") {
         this.enableForm();
         this.gotIt = false;
-        this.getCustomers();
+        this.getOrganizations();
       }
       else {
         this.disableForm(false);
@@ -67,16 +67,16 @@ export class CustomerPage implements OnInit {
     const resp = await this.dataService.show(`${this.klass}`, + this.id);
     this.form.patchValue(resp['data']);
     if(this.form.controls['parent_id'].value != null || this.sessionService.currentUser.role == 'admin') {
-      this.getCustomers();
+      this.getOrganizations();
     }
     else {
       this.gotIt = true;
     }
   }
 
-  async getCustomers() {
-    const resp = await this.dataService.index("customers", {names_and_ids_only: true});
-    this.customers = resp['data'].filter(c => parseInt(c[0]) != parseInt(this.id));
+  async getOrganizations() {
+    const resp = await this.dataService.index("organizations", {names_and_ids_only: true});
+    this.organizations = resp['data'].filter(c => parseInt(c[0]) != parseInt(this.id));
     this.gotIt = true;
   }
 

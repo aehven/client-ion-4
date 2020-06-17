@@ -11,7 +11,7 @@ export class User {
   minileague_id: number;
   permissions: any;
   wst: string;
-  customer_id: number;
+  organization_id: number;
   jwt: string;
 
   constructor(values: Object = {}) {

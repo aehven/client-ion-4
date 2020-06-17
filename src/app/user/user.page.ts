@@ -29,9 +29,9 @@ export class UserPage implements OnInit {
   public id: any;
   public role: string;
   public errorMessage: string;
-  public customers;
-  public userCustomer;
-  public usersBelongToCustomers = environment.usersBelongToCustomers;
+  public organizations;
+  public userOrganization;
+  public usersBelongToOrganizations = environment.usersBelongToOrganizations;
 
   constructor(public dataService: DataService,
               public route: ActivatedRoute,
@@ -43,7 +43,7 @@ export class UserPage implements OnInit {
                 this.form = fb.group({
                   'first_name' : [null, Validators.required],
                   'last_name' : [null, Validators.required],
-                  'customer_id' : [this.sessionService.currentUser.customer_id],
+                  'organization_id' : [this.sessionService.currentUser.organization_id],
                   'email' :  [null, [Validators.required]],
                   'role': ['regular'],
                   'password' : '',
@@ -71,7 +71,7 @@ export class UserPage implements OnInit {
 
       if(this.id == "new") {
         this.gotIt = false;
-        this.getCustomers();
+        this.getOrganizations();
       }
       else {
         this.gotIt = false
@@ -84,13 +84,13 @@ export class UserPage implements OnInit {
     const resp = await this.dataService.show(`${this.klass}`, + this.id);
     this.role = resp['data']['role'];
     this.form.patchValue(resp['data']);
-    this.getCustomers();
+    this.getOrganizations();
   }
 
-  async getCustomers() {
-    if(this.usersBelongToCustomers && this.sessionService.currentUser.can('index', 'Customer')) {
-      const resp = await this.dataService.index("customers");
-      this.customers = resp['data'];
+  async getOrganizations() {
+    if(this.usersBelongToOrganizations && this.sessionService.currentUser.can('index', 'Organization')) {
+      const resp = await this.dataService.index("organizations");
+      this.organizations = resp['data'];
       this.gotIt = true;
     }
     else {
@@ -150,11 +150,11 @@ export class UserPage implements OnInit {
     saveAs(blob, "MyData.txt");
   }
 
-   customerChanged(event: any):void {
-     this.userCustomer = event.value;
-     if(this.userCustomer > 0) {
+   organizationChanged(event: any):void {
+     this.userOrganization = event.value;
+     if(this.userOrganization > 0) {
        this.form.controls['role'].setValue("regular");
      }
-     console.log("customer changed", this.userCustomer);
+     console.log("organization changed", this.userOrganization);
    }
 }

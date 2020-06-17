@@ -8,6 +8,6 @@ export const environment = {
   // webSocketPath: `ws://localhost:3030/cable`, //use this when not on a 192.168.2 network
   homePath: "/home",
   allowAnonymousUsers: false,
-  usersBelongToCustomers: true,
+  usersBelongToOrganizations: true,
   version: "0.0.0"
 };

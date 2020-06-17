@@ -1,4 +1,4 @@
-<div *ngIf="gotIt" class="got-customer">GOT IT</div>
+<div *ngIf="gotIt" class="got-organization">GOT IT</div>
 
 <app-header title="{{dKlass||Klass}}"></app-header>
 
@@ -12,14 +12,14 @@
     
               <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
                 <div class="ion-padding">
-                  <ion-item *ngIf="customers?.length > 0 && sessionService?.currentUser?.can('create', 'Customer')">
-                    <ion-select placeholder="Parent customer" formControlName="parent_id">
+                  <ion-item *ngIf="organizations?.length > 0 && sessionService?.currentUser?.can('create', 'Organization')">
+                    <ion-select placeholder="Parent organization" formControlName="parent_id">
                       <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
-                      <ion-select-option *ngFor="let customer of customers" [value]="customer.id">{{customer.name}}</ion-select-option>
+                      <ion-select-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</ion-select-option>
                     </ion-select>
                   </ion-item>
                   <ion-item>
-                    <ion-input name="name" type="text" placeholder="Customer name" autocomplete="off" formControlName="name"></ion-input>
+                    <ion-input name="name" type="text" placeholder="Organization name" autocomplete="off" formControlName="name"></ion-input>
                   </ion-item>
                   <ion-item>
                     <ion-input name="address1" type="text" placeholder="Address 1" autocomplete="off" formControlName="address1"></ion-input>
@@ -41,7 +41,7 @@
                 </ion-button>
     
                 <ion-button
-                  *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Customer'))"
+                  *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Organization'))"
                   (click)="enableForm()"
                 >
                   Edit
@@ -55,7 +55,7 @@
                 </ion-button>
     
                 <ion-button color="danger"
-                  *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Customer')"
+                  *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Organization')"
                   (click)="delete($event)"
                 >
                   Delete
@@ -70,7 +70,7 @@
     </ion-row>
     <ion-row class="users-list">
       <ion-col>
-        <app-users [customerId]="id"></app-users>
+        <app-users [organizationId]="id"></app-users>
       </ion-col>
     </ion-row>
   </ion-grid>

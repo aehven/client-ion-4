@@ -31,9 +31,9 @@ export class AuditsPage implements OnInit, AfterViewInit {
   public page = 0;
   public pageSize = 10;
 
-  public usersBelongToCustomers = environment.usersBelongToCustomers;
+  public usersBelongToOrganizations = environment.usersBelongToOrganizations;
 
-  public includeAudits = { User: true, Customer: true, Notification: true};
+  public includeAudits = { User: true, Organization: true, Notification: true};
   public auditTypes = Object.keys(this.includeAudits);
 
   constructor(public sessionService: SessionService,

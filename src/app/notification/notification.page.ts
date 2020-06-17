@@ -23,7 +23,7 @@ export class NotificationPage implements OnInit {
   public isReadOnly: boolean = true;
   public id;
   public errorMessage;
-  public customers;
+  public organizations;
 
   constructor(public dataService: DataService,
               public route: ActivatedRoute,

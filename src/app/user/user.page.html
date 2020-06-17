@@ -10,10 +10,10 @@
 
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
             <div class="ion-padding">
-              <ion-item *ngIf="usersBelongToCustomers && sessionService?.currentUser?.can('index', 'Customer')">
-                <ion-select placeholder="Customer" formControlName="customer_id" (selectionChange)="customerChanged($event)">
+              <ion-item *ngIf="usersBelongToOrganizations && sessionService?.currentUser?.can('index', 'Organization')">
+                <ion-select placeholder="Organization" formControlName="organization_id" (selectionChange)="organizationChanged($event)">
                   <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
-                  <ion-select-option *ngFor="let customer of customers" [value]="customer.id">{{customer.name}}</ion-select-option>
+                  <ion-select-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
@@ -27,7 +27,7 @@
               </ion-item>
               <ion-item *ngIf="sessionService.currentUser?.can('create', 'User')">
                 <ion-select placeholder="Role" [value]="sessionService.currentUser['role']" formControlName="role">
-                  <ion-select-option *ngIf="userCustomer > 0" value="admin">Admin</ion-select-option>
+                  <ion-select-option *ngIf="userOrganization > 0" value="admin">Admin</ion-select-option>
                   <ion-select-option value="manager">Manager</ion-select-option>
                   <!-- <ion-select-option value="supervisor">Supervisor</ion-select-option> -->
                   <ion-select-option value="regular">Regular</ion-select-option>
@@ -35,7 +35,7 @@
               </ion-item>
               <div class="user-role-exp">
                 <div *ngIf="form.controls['role'].value == 'manager'">
-                  A manager has special permissions, including creating users and sub-customers, as well as other privileges.  Please choose 'Regular' user unless special permissions are absoltely required for this user.
+                  A manager has special permissions, including creating users and sub-organizations, as well as other privileges.  Please choose 'Regular' user unless special permissions are absoltely required for this user.
                 </div>
                 <div *ngIf="form.controls['role'].value == 'regular'">
                   A regular user can....  Assign this role to a user unless you are sure higher permissions are necessary now.

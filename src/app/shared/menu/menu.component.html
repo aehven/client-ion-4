@@ -9,9 +9,9 @@
     <ion-label>Users</ion-label>
   </ion-item>
 
-  <ion-item *ngIf="usersBelongToCustomers && sessionService?.currentUser?.can('index', 'Customer')" routerLink="/customers">
+  <ion-item *ngIf="usersBelongToOrganizations && sessionService?.currentUser?.can('index', 'Organization')" routerLink="/organizations">
     <ion-icon name="business" slot="start"></ion-icon>
-    <ion-label>{{aCustomerIsCalled}}</ion-label>
+    <ion-label>{{aOrganizationIsCalled}}</ion-label>
   </ion-item>
 
   <ion-item routerLink="/notifications">
