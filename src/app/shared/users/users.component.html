@@ -23,7 +23,7 @@
   <div class="users">
     <ion-list>
       <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-        <div class="item-name">{{item.last_name}}, {{item.first_name}}</div>
+        <div class="item-name">{{item.first_name}} {{item.last_name}}</div>
         <div class="item-organization-name">{{item.organization_name_with_ancestors}}</div>
         <div class="item-email">{{item.email}}</div>
         <div class="item-role">{{item.role}}</div>
