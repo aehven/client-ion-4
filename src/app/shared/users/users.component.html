@@ -23,15 +23,15 @@
   <div class="users">
     <ion-list>
       <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-        <div class="item-name">{{item.first_name}} {{item.last_name}}</div>
-        <div class="item-organization-name">{{item.organization_name_with_ancestors}}</div>
+        <div class="item-name">{{item.fullName}}</div>
+        <div class="item-organization-name">{{item.organizationNameWithAncestors}}</div>
         <div class="item-email">{{item.email}}</div>
         <div class="item-role">{{item.role}}</div>
         <div class="item-go"><ion-icon name="arrow-forward"></ion-icon></div>
       </ion-item>
     </ion-list>
 
-    <div *ngIf="data.length < collectionSize; else endOfData">
+    <div *ngIf="data?.length < collectionSize; else endOfData">
       <div class="grey ion-padding">
         Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
       </div>

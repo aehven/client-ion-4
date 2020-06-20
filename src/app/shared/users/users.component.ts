@@ -1,8 +1,13 @@
 import { environment } from '../../../environments/environment';
 
+import { map } from 'rxjs/operators';
+
 import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
+
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
 
 import { pluralize, titleize } from 'inflected';
 
@@ -27,7 +32,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   public Klasses = pluralize(this.Klass);
 
   public gotIt: boolean = false;
-  public data: any[] = [];
+  public data;// any[] = [];
 
   public searchTerm = "";
   public collectionSize = 1;
@@ -38,6 +43,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
   constructor(public sessionService: SessionService,
     public dataService: DataService,
+    private apollo: Apollo,
     public storage: StorageService,
     private route: ActivatedRoute,
     public router: Router) {}
@@ -56,8 +62,9 @@ export class UsersComponent implements OnInit, AfterViewInit {
     this.loadData();
   }
 
+
   public async loadData(event:any=null) {
-    if(this.data.length >= this.collectionSize) {
+    if(this.data && this.data.length >= this.collectionSize) {
       if(event) {
         event.target.complete();
       }
@@ -77,15 +84,25 @@ export class UsersComponent implements OnInit, AfterViewInit {
       params['organization_id'] = this.organizationId;
     }
 
-    const resp = await this.dataService.index(this.klass, params);
-    for(let item of resp['data']) {
-      this.data.push(item);
-    }
-    this.collectionSize = resp['meta']['total'];
-    this.gotIt = true;
-    if(event) {
-      event.target.complete();
-    }
+    const resp = await this.apollo.query({query: gql`
+          query  {
+            users {
+              id
+              fullName
+              organizationNameWithAncestors
+              email
+              role
+            }
+          }`
+      }).toPromise();
+    
+    this.data = resp.data['users'];
+
+    // this.collectionSize = resp['meta']['total'];
+    // this.gotIt = true;
+    // if(event) {
+    //   event.target.complete();
+    // }
   }
 
   selectItem(id: number): void {

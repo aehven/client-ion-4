@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   apiPath: `http://192.168.2.10:3030/api/v1`, //use this for testing from phone
+  graphqlUri: `http://192.168.2.10:3030/graphql`, //use this for testing from phone
   // apiPath: `http://localhost:3030`, //use this when not on a 192.168.2 network
   demoUser: "a@null.com",
   demoPassword: "password",

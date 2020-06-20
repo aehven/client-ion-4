@@ -6,6 +6,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
+import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
 
 // import { NoopInterceptor } from './interceptors/noop-interceptor';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
@@ -46,8 +49,19 @@ import { SharedModule } from './shared/shared.module';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ActionCableService,
-    httpInterceptorProviders
-  ],
+    httpInterceptorProviders,
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: environment.graphqlUri
+          })
+        }
+      },
+      deps: [HttpLink]
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
