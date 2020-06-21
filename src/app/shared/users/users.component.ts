@@ -37,7 +37,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   public searchTerm = "";
   public collectionSize = 1;
   public page = 0;
-  public pageSize = 10;
+  public perPage = 10;
 
   public usersBelongToOrganizations = environment.usersBelongToOrganizations;
 
@@ -75,7 +75,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
     this.gotIt = false;
     
     let params = {
-      per_page: this.pageSize, 
+      per_page: this.perPage, 
       page: this.page, 
       search: this.searchTerm,
     };
@@ -84,17 +84,19 @@ export class UsersComponent implements OnInit, AfterViewInit {
       params['organization_id'] = this.organizationId;
     }
 
-    const resp = await this.apollo.query({query: gql`
+    const query = gql`
           query  {
-            users {
+            users(page: ${this.page}, perPage: ${this.perPage}) {
               id
               fullName
               organizationNameWithAncestors
               email
               role
             }
-          }`
-      }).toPromise();
+          }
+    `;
+    
+    const resp = await this.apollo.query({query: query}).toPromise();
     
     this.data = resp.data['users'];
 
