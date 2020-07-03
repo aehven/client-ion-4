@@ -92,7 +92,8 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
 
       // this.collectionSize = resp['meta']['total'];
       // this.getOrganizations(event);
-    }
+      this.gotIt = true;
+  }
 
     async getOrganizations(event:any=null) {
       const resp = await this.dataService.index(this.klasses);

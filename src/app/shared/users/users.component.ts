@@ -96,10 +96,11 @@ export class UsersComponent implements OnInit, AfterViewInit {
     }
 
     // this.collectionSize = resp['meta']['total'];
-    // this.gotIt = true;
     // if(event) {
     //   event.target.complete();
     // }
+
+    this.gotIt = true;
   }
 
   selectItem(id: number): void {
