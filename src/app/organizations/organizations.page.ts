@@ -1,6 +1,9 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
+
 import { pluralize, titleize } from 'inflected';
 
 import { DataService } from '../services/data.service';
@@ -25,13 +28,14 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
   public searchTerm = "";
   public collectionSize = 1;
   public page = 0;
-  public pageSize = 10;
-  public kind = "all";
+  public perPage = 10;
+  public kind = null;
 
   constructor(public sessionService: SessionService,
     public dataService: DataService,
     public storage: StorageService,
     private route: ActivatedRoute,
+    private apollo: Apollo,
     public router: Router) {}
 
     ngOnInit() {
@@ -63,14 +67,33 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
       this.page += 1;
       this.gotIt = false;
 
-      const resp = await this.dataService.index(this.klass, {kind: this.kind, per_page: this.pageSize, page: this.page, search: this.searchTerm})
+      const query = gql`
+        query {
+          organizations(page: ${this.page}, perPage: ${this.perPage}, kind: ${this.kind}) {
+            id
+            name
+            level
+          }
+        }
+      `
 
-      for(let item of resp['data']) {
-        item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
-        this.data.push(item);
+      var resp;
+      try {
+        resp = await this.apollo.query({query: query}).toPromise();
+
+        if(resp.data && resp.data['organizations']) {
+          for(let item of resp.data['organizations']) {
+            item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
+            this.data.push(item);
+          }
+        }
       }
-      this.collectionSize = resp['meta']['total'];
-      this.getOrganizations(event);
+      catch (err) {
+        console.error(JSON.stringify(resp));
+        console.error(err);
+      }
+      // this.collectionSize = resp['meta']['total'];
+      // this.getOrganizations(event);
     }
 
     async getOrganizations(event:any=null) {

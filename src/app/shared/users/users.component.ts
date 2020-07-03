@@ -73,16 +73,6 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    
-    let params = {
-      per_page: this.perPage, 
-      page: this.page, 
-      search: this.searchTerm,
-    };
-
-    if(this.organizationId && !isNaN(this.organizationId)) {
-      params['organization_id'] = this.organizationId;
-    }
 
     const query = gql`
           query  {
