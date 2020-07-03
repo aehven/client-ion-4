@@ -69,29 +69,27 @@ export class OrganizationsPage implements AfterViewInit, OnInit {
 
       const query = gql`
         query {
-          organizations(page: ${this.page}, perPage: ${this.perPage}, kind: ${this.kind}) {
+          organizations(page: ${this.page}) {
             id
             name
             level
+            kind
           }
         }
       `
 
-      var resp;
-      try {
-        resp = await this.apollo.query({query: query}).toPromise();
+      const resp = await this.apollo.query({query: query}).toPromise();
 
-        if(resp.data && resp.data['organizations']) {
-          for(let item of resp.data['organizations']) {
-            item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
-            this.data.push(item);
-          }
+      if(resp.data && resp.data['organizations']) {
+        for(let item of resp.data['organizations']) {
+          item.name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(item.level) + item.name;
+          this.data.push(item);
         }
       }
-      catch (err) {
-        console.error(JSON.stringify(resp));
-        console.error(err);
+      else if(resp.errors) {
+        console.error(JSON.stringify(resp.errors));
       }
+
       // this.collectionSize = resp['meta']['total'];
       // this.getOrganizations(event);
     }
