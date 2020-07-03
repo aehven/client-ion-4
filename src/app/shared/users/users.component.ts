@@ -88,13 +88,19 @@ export class UsersComponent implements OnInit, AfterViewInit {
     
     const resp = await this.apollo.query({query: query}).toPromise();
     
-    this.data = resp.data['users'];
+    if(resp.data && resp.data['users']) {
+      this.data = resp.data['users'];
+    }
+    else if(resp.errors) {
+      console.error(JSON.stringify(resp.errors));
+    }
 
     // this.collectionSize = resp['meta']['total'];
-    // this.gotIt = true;
     // if(event) {
     //   event.target.complete();
     // }
+
+    this.gotIt = true;
   }
 
   selectItem(id: number): void {

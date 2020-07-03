@@ -24,7 +24,7 @@
 
   <ion-list>
     <ion-item *ngFor="let item of data" class="cursor-pointer"> <!-- (click)="selectItem(item.id)" -->
-      <div class="item-date">{{item.created_at | date: 'short'}}</div>
+      <div class="item-date">{{item.createdAt | date: 'short'}}</div>
       <div class="item-level">
         <ion-chip color="success" *ngIf="item.level == 'Info'">Info</ion-chip>
         <ion-chip color="warning" *ngIf="item.level == 'Warning'">Warning</ion-chip>
