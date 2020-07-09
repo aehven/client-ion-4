@@ -1,0 +1,60 @@
+<div *ngIf="gotIt" class="got-test">GOT IT</div>
+
+<app-header title="{{Klass}}"></app-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <form [formGroup]="form" (ngSubmit)="submitForm(form)">
+          <ion-grid>
+            <ion-row color="primary" class="ion-justify-content-center">
+    
+              <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
+                <div class="ion-padding">
+                  <ion-item>
+                    <ion-input name="name" type="text" placeholder="Test name" autocomplete="off" formControlName="name"></ion-input>
+                  </ion-item>
+                </div>
+              </ion-col>
+            </ion-row>
+    
+            <ion-row class="ion-justify-content-center">
+                <ion-button
+                  *ngIf="!isReadOnly"
+                  type="submit"
+                  [disabled]="!form.valid"
+                >
+                  Submit
+                </ion-button>
+    
+                <ion-button
+                  *ngIf="isReadOnly && (sessionService.currentUser?.can('update', 'Test'))"
+                  (click)="enableForm()"
+                >
+                  Edit
+                </ion-button>
+    
+                <ion-button color="secondary"
+                  *ngIf="!isReadOnly"
+                  (click)="cancel()"
+                >
+                  Cancel
+                </ion-button>
+    
+                <ion-button color="danger"
+                  *ngIf="isReadOnly && sessionService.currentUser?.can('destroy', 'Test')"
+                  (click)="delete($event)"
+                >
+                  Delete
+                </ion-button>
+            </ion-row>
+            <ion-row *ngIf="errorMessage">
+              <ion-col class="error center">{{errorMessage}}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

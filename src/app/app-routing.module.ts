@@ -14,7 +14,8 @@ const routes: Routes = [
   // { path: 'audit/:id', loadChildren: './audit/audit.module#AuditPageModule' },
   { path: 'audits', loadChildren: './audits/audits.module#AuditsPageModule' },
   { path: 'users-all', loadChildren: './users-all/users-all.module#UsersAllPageModule' },
-  { path: 'tests-all', loadChildren: './tests-all/tests-all.module#TestsAllPageModule' }
+  { path: 'tests-all', loadChildren: './tests-all/tests-all.module#TestsAllPageModule' },
+  { path: 'test/:id', loadChildren: './test/test.module#TestPageModule' },
 ];
 
 @NgModule({
