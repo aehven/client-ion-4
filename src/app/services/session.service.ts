@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
+
 import { StorageService } from './storage.service';
 import { WebSocketsService } from './web-sockets.service';
 import { NotificationService } from './notification.service';
@@ -22,6 +25,7 @@ export class SessionService {
     private webSocketsService: WebSocketsService,
     public storage: StorageService,
     public dataService: DataService,
+    private apollo: Apollo,
     private notificationService: NotificationService) {
       console.log(`SessionService: ${environment.apiPath}`);
       this.initialize();
@@ -85,9 +89,16 @@ export class SessionService {
   }
 
   async signIn(params: any) {
-    const resp = await this.dataService.post("/user_token ", {auth: params});
+    const mutation = gql`
+      mutation signIn {
+        userAuthenticate(input: {email: "${params.email}", password: "${params.password}"}) {
+          jwt
+        }
+    }`;
 
-    this.user = new User({email: params.email, jwt: resp['jwt']});
+    const resp = await this.apollo.mutate({mutation: mutation}).toPromise();
+
+    this.user = new User({email: params.email, jwt: resp.data['userAuthenticate']['jwt']});
     console.log("logged in", this.user);
     this.storage.setObj("currentUser", this.user);
 
