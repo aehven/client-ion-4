@@ -1,3 +1,5 @@
+import { stringify } from '../util/stringify';
+
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router, ActivatedRoute} from '@angular/router';
@@ -35,6 +37,7 @@ export class TestPage implements OnInit {
               public storage: StorageService,
               fb: FormBuilder) {
                 this.form = fb.group({
+                  'id' : [null],
                   'name' : [null, Validators.required],
                 });
               }
@@ -44,6 +47,7 @@ export class TestPage implements OnInit {
       this.id = params['id'];
 
       if(this.id == "new") {
+        this.id = null;
         this.enableForm();
         this.gotIt = false;
       }
@@ -56,6 +60,7 @@ export class TestPage implements OnInit {
 
   async get() {
     this.gotIt = false;
+    
     const query = gql`
       query {
         test(id: ${this.id}) {
@@ -72,26 +77,36 @@ export class TestPage implements OnInit {
   }
 
   async submitForm(form) {
-    try {
-      this.errorMessage = null;
-      const response = await this.dataService.send(this.klass, this.id, form.value);
-      this.id = response['data']['id'];
-      this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
+    this.errorMessage = null;
+
+    const mutation = gql`
+      mutation test {
+        test(input: ${stringify(this.form.value)}) {
+          id
+          name
+        }
+      }
+    `;
+
+    const resp = await this.apollo.mutate({mutation: mutation}).toPromise();
+    if(resp.data && resp.data['test']) {
+      this.id = resp['data']['test']['id'];
+      this.router.navigate([`/${pluralize(this.klass)}-all`], {queryParams: {reload: true}});
     }
-    catch(error) {
-      this.errorMessage = error.statusText;
+    else if(resp.errors) {
+      console.error(JSON.stringify(resp.errors));
     }
   }
 
-  async delete(event) {
-    if(confirm("Are you sure?")) {
-      await this.dataService.delete(this.klass, this.id)
-      this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
-    }
-    else {
-      event.preventDefault(); //stay where we are
-    }
-  }
+  // async delete(event) {
+  //   if(confirm("Are you sure?")) {
+  //     await this.dataService.delete(this.klass, this.id)
+  //     this.router.navigate([`/${pluralize(this.klass)}`], {queryParams: {reload: true}});
+  //   }
+  //   else {
+  //     event.preventDefault(); //stay where we are
+  //   }
+  // }
 
   enableForm(): void {
     this.isReadOnly = false;
