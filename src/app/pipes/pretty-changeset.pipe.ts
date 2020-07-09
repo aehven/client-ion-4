@@ -9,7 +9,7 @@ export class PrettyChangesetPipe implements PipeTransform {
     if(!audit) {
       return "";
     }
-    let changeset = audit.changeset;
+    let changeset = JSON.parse(audit.jsonChangeset);
     let event = audit.event;
     let output = "<ul>";
 

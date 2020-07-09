@@ -28,12 +28,12 @@
 
   <ion-list>
     <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
-      <div class="item-date">{{item.created_at | date: 'short'}}</div>
-      <div class="item-performer">{{item.performed_by}}</div>
+      <div class="item-date">{{item.createdAt | date: 'short'}}</div>
+      <div class="item-performer">{{item.performedBy}}</div>
       <div class="item-event-type">
         <span class="item-event">{{item.event | titlecase}}</span>
         <br />
-        <span class="item-type">{{item.item_type}}</span>
+        <span class="item-type">{{item.itemType}}</span>
         {{item.item_string}}
       </div>
       <div class="item-changeset" [innerHTML]="item | prettyChangeset"></div>
