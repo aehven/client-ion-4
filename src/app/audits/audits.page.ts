@@ -4,6 +4,9 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
+
 import { pluralize, titleize } from 'inflected';
 
 import { DataService } from '../services/data.service';
@@ -29,7 +32,7 @@ export class AuditsPage implements OnInit, AfterViewInit {
   public searchTerm = "";
   public collectionSize = 1;
   public page = 0;
-  public pageSize = 10;
+  public perPage = 10;
 
   public usersBelongToOrganizations = environment.usersBelongToOrganizations;
 
@@ -40,6 +43,7 @@ export class AuditsPage implements OnInit, AfterViewInit {
     public dataService: DataService,
     public storage: StorageService,
     private route: ActivatedRoute,
+    private apollo: Apollo,
     public router: Router) {}
 
   ngOnInit() {
@@ -71,15 +75,35 @@ export class AuditsPage implements OnInit, AfterViewInit {
 
     this.page += 1;
     this.gotIt = false;
-    const resp = await this.dataService.index(this.klass, {per_page: this.pageSize, page: this.page, search: this.searchTerm, include: JSON.stringify(this.includeAudits)})
-    for(let item of resp['data']) {
-      this.data.push(item);
+
+    const query = gql`
+          query  {
+            audits(page: ${this.page}, perPage: ${this.perPage}) {
+              id
+              createdAt
+              performedBy
+              event
+              itemType
+              itemString
+              jsonChangeset
+            }
+          }
+    `;
+    
+    const resp = await this.apollo.query({query: query}).toPromise();
+    
+    if(resp.data && resp.data['audits']) {
+      this.data = resp.data['audits'];
     }
-    this.collectionSize = resp['meta']['total'];
-    this.gotIt = true;
-    if(event) {
-      event.target.complete();
+    else if(resp.errors) {
+      console.error(JSON.stringify(resp.errors));
     }
+
+    // this.collectionSize = resp['meta']['total'];
+    // this.gotIt = true;
+    // if(event) {
+    //   event.target.complete();
+    // }
   }
 
   selectItem(id: number): void {
