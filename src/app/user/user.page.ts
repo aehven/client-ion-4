@@ -1,9 +1,13 @@
 import { environment } from '../../environments/environment';
+import { stringify } from '../util/stringify';
 
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
+
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
 
 import { pluralize, titleize } from 'inflected';
 import { saveAs } from 'file-saver';
@@ -38,12 +42,14 @@ export class UserPage implements OnInit {
               public router: Router,
               public location: Location,
               public sessionService: SessionService,
+              private apollo: Apollo,
               public storage: StorageService,
               fb: FormBuilder) {
                 this.form = fb.group({
-                  'first_name' : [null, Validators.required],
-                  'last_name' : [null, Validators.required],
-                  'organization_id' : [this.sessionService.currentUser.organization_id],
+                  'id': [null],
+                  'firstName' : [null, Validators.required],
+                  'lastName' : [null, Validators.required],
+                  'organizationId' : [this.sessionService.currentUser.organization_id],
                   'email' :  [null, [Validators.required]],
                   'role': ['regular'],
                   'password' : '',
@@ -68,45 +74,58 @@ export class UserPage implements OnInit {
       else {
         this.disableForm(false);
       }
-
-      if(this.id == "new") {
-        this.gotIt = false;
-        this.getOrganizations();
-      }
-      else {
-        this.gotIt = false
-        this.get();
-      }
     });
+
+    this.get();
   }
 
   async get() {
-    const resp = await this.dataService.show(`${this.klass}`, + this.id);
-    this.role = resp['data']['role'];
-    this.form.patchValue(resp['data']);
-    this.getOrganizations();
-  }
+    const query = gql`
+      query user {
+        user(id: ${this.id}) {
+          id
+          firstName
+          lastName
+          email
+          role
+          permissions
+          organizations {
+            id
+            name
+          }
+        }
+      }`;
 
-  async getOrganizations() {
-    if(this.usersBelongToOrganizations && this.sessionService.currentUser.can('index', 'Organization')) {
-      const resp = await this.dataService.index("organizations");
-      this.organizations = resp['data'];
-      this.gotIt = true;
-    }
-    else {
-      this.gotIt = true;
-    }
+    const resp = await this.apollo.query({query: query}).toPromise();
+
+    this.role = resp.data['user']['role'];
+    this.form.patchValue(resp.data['user']);
+    this.organizations = resp.data['user']['organizations'];
   }
 
   async submitForm(form: any) {
-    try {
-      const response = await this.dataService.send(this.klass, this.id, form.value);
-      this.id = response['data']['id'];
-      this.location.back();
-    }
-    catch(error) {
-      this.errorMessage = error.statusText;
-    }
+    var cleanForm = Object.assign({}, form.value);
+    delete cleanForm['confirmPassword'];
+
+    const mutation = gql`
+      mutation user {
+        user(input: ${stringify(cleanForm)}) {
+          id
+          firstName
+          lastName
+          email
+          role
+          organizations {
+            id
+            name
+          }
+        }
+      }`;
+
+    const resp = await this.apollo.mutate({mutation: mutation}).toPromise();
+    
+    this.id = resp.data['user']['id'];
+    //   this.location.back();
   }
 
   async delete(event: any) {

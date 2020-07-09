@@ -11,16 +11,16 @@
           <ion-col align-self-center size-xs="6" size-sm="5" size-md="4" size-lg="3">
             <div class="ion-padding">
               <ion-item *ngIf="usersBelongToOrganizations && sessionService?.currentUser?.can('index', 'Organization')">
-                <ion-select placeholder="Organization" formControlName="organization_id" (selectionChange)="organizationChanged($event)">
+                <ion-select placeholder="Organization" formControlName="organizationId" (selectionChange)="organizationChanged($event)">
                   <ion-select-option *ngIf="sessionService?.currentUser?.role == 'admin'" value="">None</ion-select-option>
                   <ion-select-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
-                <ion-input name="first_name" type="text" placeholder="First name" autocomplete="off" formControlName="first_name"></ion-input>
+                <ion-input name="firstName" type="text" placeholder="First name" autocomplete="off" formControlName="firstName"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-input name="last_name" type="text" placeholder="Last name" autocomplete="off" formControlName="last_name"></ion-input>
+                <ion-input name="lastName" type="text" placeholder="Last name" autocomplete="off" formControlName="lastName"></ion-input>
               </ion-item>
               <ion-item>
                 <ion-input name="email" type="email" placeholder="your@email.com" autocomplete="off" formControlName="email"></ion-input>
