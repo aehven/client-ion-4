@@ -1,0 +1,48 @@
+<div *ngIf="gotIt" class="got-tests-list">GOT IT</div>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm>
+        <ion-button color="primary" (click)="newItem();"
+          *ngIf="sessionService.currentUser?.can('create', 'Test')">
+          New {{Klass}}
+        </ion-button>
+      </ion-col>
+      <ion-col size="12" size-sm>
+         <ion-searchbar
+          placeholder="Search by name"
+          [value]="searchTerm"
+          (ionChange)="search($event)"
+          dbounce="500"
+          ></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="tests">
+    <ion-list>
+      <ion-item *ngFor="let item of data" class="cursor-pointer" (click)="selectItem(item.id)">
+        <div class="item-name">{{item.name}}</div>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="data?.length < collectionSize; else endOfData">
+      <div class="grey ion-padding">
+        Scroll down or <a class="cursor-pointer" (click)="loadData()">click</a> for more {{klasses}}....
+      </div>
+    </div>
+    <ng-template #endOfData>
+      <div class="grey ion-padding">
+        No more {{klasses}}.
+      </div>
+    </ng-template>
+  </div>
+
+  <ion-infinite-scroll threshold="80%" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more {{klasses}}...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+<ion-content>

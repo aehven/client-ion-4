@@ -12,6 +12,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import {HeaderComponent} from './header/header.component';
 import {MenuComponent} from './menu/menu.component';
 import {UsersComponent} from './users/users.component';
+import {TestsComponent} from './tests/tests.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,22 @@ import {UsersComponent} from './users/users.component';
       },
       deps: [HttpLink]
     }],
-  declarations: [HeaderComponent, MenuComponent, UsersComponent],
-  exports: [CommonModule, HeaderComponent, MenuComponent, UsersComponent, ApolloModule, HttpLinkModule]
+  declarations: [
+    HeaderComponent, 
+    MenuComponent, 
+
+    TestsComponent,
+    UsersComponent
+  ],
+  exports: [
+    CommonModule, 
+    HeaderComponent, 
+    MenuComponent, 
+    ApolloModule, 
+    HttpLinkModule,
+
+    UsersComponent,
+    TestsComponent
+  ]
 })
 export class SharedModule { }

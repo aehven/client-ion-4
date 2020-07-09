@@ -13,7 +13,8 @@ const routes: Routes = [
   { path: 'terms-and-conditions', loadChildren: './terms-and-conditions/terms-and-conditions.module#TermsAndConditionsPageModule' },
   // { path: 'audit/:id', loadChildren: './audit/audit.module#AuditPageModule' },
   { path: 'audits', loadChildren: './audits/audits.module#AuditsPageModule' },
-  { path: 'users-all', loadChildren: './users-all/users-all.module#UsersAllPageModule' }
+  { path: 'users-all', loadChildren: './users-all/users-all.module#UsersAllPageModule' },
+  { path: 'tests-all', loadChildren: './tests-all/tests-all.module#TestsAllPageModule' }
 ];
 
 @NgModule({

@@ -1,0 +1,16 @@
+.tests {
+  max-width: 67em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ion-item div {
+  white-space: nowrap;
+  padding-right: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-name {
+  width: 20em;
+}
