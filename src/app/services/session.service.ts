@@ -93,14 +93,27 @@ export class SessionService {
       mutation signIn {
         userAuthenticate(input: {email: "${params.email}", password: "${params.password}"}) {
           jwt
+          server
+          user {
+            id
+            firstName
+            lastName
+            email
+            role
+            permissions
+          }
         }
     }`;
 
     const resp = await this.apollo.mutate({mutation: mutation}).toPromise();
 
     this.user = new User({email: params.email, jwt: resp.data['userAuthenticate']['jwt']});
-    console.log("logged in", this.user);
+    this.user.mergeValues(resp.data['userAuthenticate']['user']);
     this.storage.setObj("currentUser", this.user);
+
+    this.storage.serverEnv = JSON.parse(resp.data['userAuthenticate']['server']);
+
+    console.log("logged in", this.user);
 
     this.handleSignIn();
 
@@ -108,11 +121,6 @@ export class SessionService {
   }
 
   async handleSignIn() {
-    const resp = await this.dataService.get("/get_profile");
-    this.storage.serverEnv = resp['server'];
-    this.user.mergeValues(resp['profile']);
-    this.storage.setObj("currentUser", this.user);
-
     this.webSocketsService.initialize(this.user);
     this.getNotifications();
 
@@ -120,7 +128,7 @@ export class SessionService {
   }
 
   async anonymousSignIn() {
-    await this.signIn({login:    "demo@null.com", password: "password"});
+    await this.signIn({login: "demo@null.com", password: "password"});
     this.router.navigate([environment.homePath]);
   }
 
