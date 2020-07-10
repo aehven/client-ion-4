@@ -68,10 +68,18 @@
         </form>
       </ion-col>
     </ion-row>
+
+    <ion-row class="patients-list">
+      <ion-col>
+        <app-patients [organizationId]="id"></app-patients>
+      </ion-col>
+    </ion-row>
+
     <ion-row class="users-list">
       <ion-col>
         <app-users [organizationId]="id"></app-users>
       </ion-col>
     </ion-row>
+
   </ion-grid>
 </ion-content>

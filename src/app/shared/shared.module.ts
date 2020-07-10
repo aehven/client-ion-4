@@ -13,6 +13,7 @@ import {HeaderComponent} from './header/header.component';
 import {MenuComponent} from './menu/menu.component';
 import {UsersComponent} from './users/users.component';
 import {TestsComponent} from './tests/tests.component';
+import {PatientsComponent} from './patients/patients.component';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import {TestsComponent} from './tests/tests.component';
     HeaderComponent, 
     MenuComponent, 
 
+    PatientsComponent,
     TestsComponent,
     UsersComponent
   ],
@@ -47,6 +49,7 @@ import {TestsComponent} from './tests/tests.component';
     ApolloModule, 
     HttpLinkModule,
 
+    PatientsComponent,
     UsersComponent,
     TestsComponent
   ]
