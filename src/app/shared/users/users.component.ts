@@ -76,7 +76,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
     const query = gql`
           query  {
-            users(page: ${this.page}, perPage: ${this.perPage}) {
+            users(organizationId: ${this.organizationId}, page: ${this.page}, perPage: ${this.perPage}) {
               id
               fullName
               organizationNameWithAncestors
