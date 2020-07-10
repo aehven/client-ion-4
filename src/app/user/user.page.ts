@@ -125,7 +125,7 @@ export class UserPage implements OnInit {
     const resp = await this.apollo.mutate({mutation: mutation}).toPromise();
     
     this.id = resp.data['user']['id'];
-    //   this.location.back();
+    this.location.back();
   }
 
   async delete(event: any) {
