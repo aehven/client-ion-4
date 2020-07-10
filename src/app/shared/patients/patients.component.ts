@@ -74,7 +74,7 @@ export class PatientsComponent implements OnInit, AfterViewInit {
 
     const query = gql`
           query  {
-            patients(page: ${this.page}, perPage: ${this.perPage}) {
+            patients(organizationId: ${this.organizationId}, page: ${this.page}, perPage: ${this.perPage}) {
               id
               fullName
               email
