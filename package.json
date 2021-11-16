@@ -33,7 +33,7 @@
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
-    "aws-sdk": "^2.693.0",
+    "aws-sdk": "^2.814.0",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "core-js": "^2.6.11",
